@@ -1,0 +1,10 @@
+
+plugin.tx_leicasfsend_sendsf {
+	enabled = {$plugin.tx_leicasfsend_sendsf.enabled}
+	subject = {$plugin.tx_leicasfsend_sendsf.subject}
+	from_mail = {$plugin.tx_leicasfsend_sendsf.from_mail}
+	from_name = {$plugin.tx_leicasfsend_sendsf.from_name}
+	recipient = {$plugin.tx_leicasfsend_sendsf.recipient}
+	logfile_path = {$plugin.tx_leicasfsend_sendsf.logfile_path}
+	opcode = {$plugin.tx_leicasfsend_sendsf.opcode}
+}
