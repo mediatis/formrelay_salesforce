@@ -75,7 +75,7 @@ class tx_leicasfsend_sendsf {
 
 			// Add FORM vars to XML
 			foreach ($EMAIL_VARS as $key => $value) {
-				// Ignore superfluous metadata in XML
+				// Ignore superfluous metadata
 				if (!($key == 'html_enabled' ||
                         $key == 'subject' ||
                         $key == 'recipient' ||
@@ -83,12 +83,17 @@ class tx_leicasfsend_sendsf {
 
 
 						// TODO : Add $key  => $value to SF-Data
+
+						// TODO: Map all form-field to SF-fieldname
+
 				}
 
 			}
 
 
 			// TODO Send all data to SF
+
+			// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
 
 			// Log event
         	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
