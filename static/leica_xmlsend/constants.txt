@@ -2,22 +2,7 @@ plugin.tx_leicasfsend_sendsf {
 	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
     enabled = 1
 
-	# cat=plugin.tx_leicasfsend_sendsf//2; type=text; label= Subject line: Default Email subject.
-	subject =
-
-	# cat=plugin.tx_leicasfsend_sendsf//3; type=text; label= From Email: Sender Email Address.
-	from_mail = voehringer@mediatis.de
-
-	# cat=plugin.tx_leicasfsend_sendsf//4; type=text; label= From Name: Sender Name.
-	from_name = WEBSITE-XML-FORM
-
-	# cat=plugin.tx_leicasfsend_sendsf//5; type=text; label= Recipient: Default Recipient Email Address.
-	recipient =
-
 	# cat=plugin.tx_leicasfsend_sendsf//6; type=text; label= Logfile Path: Path to Logfile including logfilename and extension. eg. "/HOME/htdocs/uploads/tx_leicasfsend/logfile.xml". No Log will be written if not set.
 	logfile_path =
-
-	# cat=plugin.tx_leicasfsend_sendsf//7; type=text; label= LMS or LBS
-	opcode = LMS
 
 }

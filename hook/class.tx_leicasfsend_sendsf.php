@@ -85,7 +85,6 @@ class tx_leicasfsend_sendsf {
 						// TODO : Add $key  => $value to SF-Data
 
 						// TODO: Map all form-field to SF-fieldname
-
 				}
 
 			}
