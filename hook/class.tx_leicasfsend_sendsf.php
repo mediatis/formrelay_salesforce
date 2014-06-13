@@ -34,7 +34,9 @@
 class tx_leicasfsend_sendsf {
 
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
+		$myInput = array();
 		// TODO: Check if country if allowed, otherwise don't do anything.
+
 
 		// TODO: Only send Sales-Request to sf
 
@@ -73,6 +75,8 @@ class tx_leicasfsend_sendsf {
 				}
 			}
 
+			
+			
 			// Add FORM vars to XML
 			foreach ($EMAIL_VARS as $key => $value) {
 				// Ignore superfluous metadata
@@ -81,14 +85,19 @@ class tx_leicasfsend_sendsf {
                         $key == 'recipient' ||
                         $key == 'recipient_copy')) {
 
-
+					
 						// TODO : Add $key  => $value to SF-Data
+					$myInput[$key] = $value;
+
+					
+
 
 						// TODO: Map all form-field to SF-fieldname
 				}
 
 			}
 
+ 			
 
 			// TODO Send all data to SF
 
@@ -98,8 +107,12 @@ class tx_leicasfsend_sendsf {
         	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
 
 		}
+		
+		sendToSalesforce($myInput);
+		echo t3lib_div::debug($EMAIL_VARS, 'TEST');
 		return $EMAIL_VARS;
 	}
+
 
 	// Generate filename from IP microtime and Extension. Low chance of not being unique
 	function unique_filename($xtn = ".tmp") {
@@ -141,6 +154,53 @@ class tx_leicasfsend_sendsf {
 	}
 }
 
+function sendToSalesforce($dataArray){
+
+ 
+	
+		$type = 'Request a Quote';
+				$name = 'Alfred';
+				$phone = '3333';
+				$email = 'abc';
+				$company ='abc';
+				$zip = '6333';
+				$text = 'Halllo';
+				$interest ='Consumables/Disposables';
+
+				$handle = curl_init();
+
+				$data = array(
+							'00N20000007Lpgs' => $type,
+							'00N20000007Lpr7' => $interest,
+							'00N20000007LqJa' => $name,
+							'00N20000007Lqu7' => $text,
+							'company' => $company,
+							'email' => $email,
+							'oid'=> '00D20000000n6sH',
+							'phone'=> $phone,
+							'submit' => 'Submit+Query',
+							'zip' => $zip,
+							'retURL' => '#',
+							);
+
+				$query_string = '';
+
+				foreach ($dataArray as $key => $value) {
+					$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
+				}
+
+				curl_setopt_array( $handle,
+					array(
+						CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
+						CURLOPT_POST => true,
+						CURLOPT_POSTFIELDS => $query_string,
+						)
+					);
+
+				curl_exec($handle);
+				curl_close($handle);
+			}
+			
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php']);
