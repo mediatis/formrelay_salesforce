@@ -23,7 +23,6 @@
 ***************************************************************/
 
 
-
 /**
  * Plugin Send form data to SourceFoce.com
  *
@@ -36,124 +35,116 @@ class tx_leicasfsend_sendsf {
 	private $conf;
 
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
+
+		// http://lists.typo3.org/pipermail/typo3-dev/2008-August/030842.html
+		//
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_leicasfsend_sendsf.'];
 		t3lib_div::debug($EMAIL_VARS, 'EMAIL_VARS');
 		// t3lib_div::debug($obj, 'obj');
 		t3lib_div::debug($GLOBALS['TSFE']->tmpl->setup, 'Alt2');
-		
+
 		$acceptedCountries = array(
 			'Germany' => true,
-			'United States ' => false 
-			);
+			'United States ' => false
+		);
 
 
 		// TODO: Check if country if allowed, otherwise don't do anything.
-	
-
-			if($EMAIL_VARS['Selectyourcountry:'] == $acceptedCountries & $permit){
 
 
-				// TODO: Only send Sales-Request to sf
-
-				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
-				if($this->conf['enabled']) {
+		if($EMAIL_VARS['Selectyourcountry:'] == $acceptedCountries & $permit){
 
 
-					// File upload Path
-					// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
-					$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
-					if(!is_dir($filePath)){
-						mkdir($filePath, 0755, true);
-					}
+			// TODO: Only send Sales-Request to sf
 
-					// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
-					// and add a link to the XML
-					$fileCounter = 0;
-					foreach($_FILES as $key => $file) {
-
-						if($file['error'] == 0 && $file['size'] > 0) {
-
-							// Generate new file name
-							// -> [hash].[extension]
-							$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
-							$fileName = $this->unique_filename($fileExt);
-
-							// Move temp-file to upload directory
-							$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
-							if(!move_uploaded_file($file['tmp_name'], $destination)) {
-								$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
-							}
-
-							// Add link to uploaded file to EMAIL_VARS / XML
-							$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
-							$fileCounter++;
-						}
-					}
+			// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
+			if($this->conf['enabled']) {
 
 
-					$fieldData = array(
-								'Inquiry_Type' => '00N20000007Lpgs',
-								'Area_of_Interest' => '00N20000007Lpr7',
-								'name' => '00N20000007LqJa',
-								'How_can_we_help_you' => '00N20000007Lqu7',
-								'CompanyInstitution' => 'company',
-								'email' => 'email',
-								'phone' => 'phone',
-								'zip' => 'zip',
-					);
+				// File upload Path
+				// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
+				$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
+				if(!is_dir($filePath)){
+					mkdir($filePath, 0755, true);
+				}
 
-					$result = array(
-						'oid'=> '00D20000000n6sH',
-						'submit' => 'Submit+Query',
-						'retURL' => '#'
-					);
-					
-					
-					// Add FORM vars to XML
-					foreach ($EMAIL_VARS as $key => $value) {
-						// Ignore superfluous metadata
-						if (!($key == 'html_enabled' ||
-		                        $key == 'subject' ||
-		                        $key == 'recipient' ||
-		                        $key == 'recipient_copy')) {
+				// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
+				// and add a link to the XML
+				$fileCounter = 0;
+				foreach($_FILES as $key => $file) {
 
-							foreach ($fieldData as $formularFieldName => $salesForceFieldName) {
-								if($key == $formularFieldName){
-									$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
-								}else{
-									$result[$key] = $value;
-								}
-							}
+					if($file['error'] == 0 && $file['size'] > 0) {
 
-							
+						// Generate new file name
+						// -> [hash].[extension]
+						$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
+						$fileName = $this->unique_filename($fileExt);
+
+						// Move temp-file to upload directory
+						$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
+						if(!move_uploaded_file($file['tmp_name'], $destination)) {
+							$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
 						}
 
+						// Add link to uploaded file to EMAIL_VARS / XML
+						$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
+						$fileCounter++;
+					}
+				}
 
+
+				$fieldData = array(
+							'Inquiry_Type' => '00N20000007Lpgs',
+							'Area_of_Interest' => '00N20000007Lpr7',
+							'name' => '00N20000007LqJa',
+							'How_can_we_help_you' => '00N20000007Lqu7',
+							'CompanyInstitution' => 'company',
+							'email' => 'email',
+							'phone' => 'phone',
+							'zip' => 'zip',
+				);
+
+				$result = array(
+					'oid'=> '00D20000000n6sH',
+					'submit' => 'Submit+Query',
+					'retURL' => '#'
+				);
+
+
+				// Add FORM vars to XML
+				foreach ($EMAIL_VARS as $key => $value) {
+					// Ignore superfluous metadata
+					if (!($key == 'html_enabled' ||
+	                        $key == 'subject' ||
+	                        $key == 'recipient' ||
+	                        $key == 'recipient_copy')) {
+
+						foreach ($fieldData as $formularFieldName => $salesForceFieldName) {
+							if($key == $formularFieldName){
+								$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
+							}else{
+								$result[$key] = $value;
+							}
+						}
 					}
 				}
 			}
-
- 			
-
-			
-
-			// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
-
-			// Log event
-        	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
-
-			$this->sendToSalesforce($result);
-			
-
-			$EMAIL_VARS = $result;
-		
+		}
 
 
-		
+		// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
+
+		// Log event
+    	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
+
+		$this->sendToSalesforce($result);
+
+		$EMAIL_VARS = $result;
+
 		return $EMAIL_VARS;
 	}
 
-	function sendToSalesforce($data){
+	private	function sendToSalesforce($data){
 		$handle = curl_init();
 
 
@@ -174,8 +165,9 @@ class tx_leicasfsend_sendsf {
 		curl_exec($handle);
 		curl_close($handle);
 	}
+
 	// Generate filename from IP microtime and Extension. Low chance of not being unique
-	function unique_filename($xtn = ".tmp") {
+	private function unique_filename($xtn = ".tmp") {
 		// explode the IP of the remote client into four parts
 		$ipbits = explode(".", t3lib_div::getIndpEnv('REMOTE_ADDR'));
 		// Get both seconds and microseconds parts of the time
@@ -196,7 +188,7 @@ class tx_leicasfsend_sendsf {
 	}
 
 	// Write $data to logfile if $logfilepath is set in TS Config
-	function writeToLogfile($logtext) {
+	private function writeToLogfile($logtext) {
 		$logfilePath = $this->conf['logfile_path'];
 
 		// Only write a logfile if path is set in TS Config and logtext is not empty
@@ -214,8 +206,6 @@ class tx_leicasfsend_sendsf {
 	}
 }
 
-
-			
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php']);
