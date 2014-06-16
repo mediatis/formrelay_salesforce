@@ -87,13 +87,14 @@ class tx_leicasfsend_sendsf {
 
 					
 						// TODO : Add $key  => $value to SF-Data
-					$myInput[$key] = $value;
+					// $myInput[$key] = $value;
 
 					
 
 
 						// TODO: Map all form-field to SF-fieldname
 				}
+
 
 			}
 
@@ -108,8 +109,8 @@ class tx_leicasfsend_sendsf {
 
 		}
 		
-		sendToSalesforce($myInput);
-		echo t3lib_div::debug($EMAIL_VARS, 'TEST');
+		sendToSalesforce();
+		//echo t3lib_div::debug($EMAIL_VARS, 'TEST');
 		return $EMAIL_VARS;
 	}
 
@@ -154,10 +155,7 @@ class tx_leicasfsend_sendsf {
 	}
 }
 
-function sendToSalesforce($dataArray){
-
- 
-	
+function sendToSalesforce(){
 		$type = 'Request a Quote';
 				$name = 'Alfred';
 				$phone = '3333';
@@ -170,6 +168,7 @@ function sendToSalesforce($dataArray){
 				$handle = curl_init();
 
 				$data = array(
+							// $this->settings
 							'00N20000007Lpgs' => $type,
 							'00N20000007Lpr7' => $interest,
 							'00N20000007LqJa' => $name,
