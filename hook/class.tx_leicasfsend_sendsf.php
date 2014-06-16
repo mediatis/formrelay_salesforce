@@ -75,6 +75,7 @@ class tx_leicasfsend_sendsf {
 				}
 			}
 
+
 			
 			
 			// Add FORM vars to XML
@@ -85,14 +86,8 @@ class tx_leicasfsend_sendsf {
                         $key == 'recipient' ||
                         $key == 'recipient_copy')) {
 
-					
-						// TODO : Add $key  => $value to SF-Data
-					// $myInput[$key] = $value;
 
 					
-
-
-						// TODO: Map all form-field to SF-fieldname
 				}
 
 
@@ -107,10 +102,27 @@ class tx_leicasfsend_sendsf {
 			// Log event
         	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
 
+			$data = array(
+					// $this->settings
+					'00N20000007Lpgs' => $EMAIL_VARS['Inquiry_Type'],
+					'00N20000007Lpr7' => $EMAIL_VARS['Area_of_Interest'],
+					'00N20000007LqJa' => $EMAIL_VARS['name'],
+					'00N20000007Lqu7' => $EMAIL_VARS['How_can_we_help_you'],
+					'company' => $EMAIL_VARS['CompanyInstitution'],
+					'email' => $EMAIL_VARS['email'],
+					'oid'=> '00D20000000n6sH',
+					'phone' => $EMAIL_VARS['Phone_Number'],
+					'submit' => 'Submit+Query',
+					'zip' => $EMAIL_VARS['Zip_Code'],
+					'retURL' => '#',
+					);
+
+				sendToSalesforce($data);
+
 		}
-		
-		sendToSalesforce();
-		//echo t3lib_div::debug($EMAIL_VARS, 'TEST');
+
+
+		echo t3lib_div::debug($this->conf['enabled'], 'TEST');
 		return $EMAIL_VARS;
 	}
 
@@ -155,50 +167,27 @@ class tx_leicasfsend_sendsf {
 	}
 }
 
-function sendToSalesforce(){
-		$type = 'Request a Quote';
-				$name = 'Alfred';
-				$phone = '3333';
-				$email = 'abc';
-				$company ='abc';
-				$zip = '6333';
-				$text = 'Halllo';
-				$interest ='Consumables/Disposables';
+function sendToSalesforce($data){
+	$handle = curl_init();
 
-				$handle = curl_init();
 
-				$data = array(
-							// $this->settings
-							'00N20000007Lpgs' => $type,
-							'00N20000007Lpr7' => $interest,
-							'00N20000007LqJa' => $name,
-							'00N20000007Lqu7' => $text,
-							'company' => $company,
-							'email' => $email,
-							'oid'=> '00D20000000n6sH',
-							'phone'=> $phone,
-							'submit' => 'Submit+Query',
-							'zip' => $zip,
-							'retURL' => '#',
-							);
+	$query_string = '';
 
-				$query_string = '';
+	foreach ($data as $key => $value) {
+		$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
+	}
 
-				foreach ($dataArray as $key => $value) {
-					$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
-				}
+	curl_setopt_array( $handle,
+		array(
+			CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => $query_string,
+			)
+		);
 
-				curl_setopt_array( $handle,
-					array(
-						CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
-						CURLOPT_POST => true,
-						CURLOPT_POSTFIELDS => $query_string,
-						)
-					);
-
-				curl_exec($handle);
-				curl_close($handle);
-			}
+	curl_exec($handle);
+	curl_close($handle);
+}
 			
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php'])	{
