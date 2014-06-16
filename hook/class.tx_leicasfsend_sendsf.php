@@ -33,100 +33,147 @@
  */
 class tx_leicasfsend_sendsf {
 
+	private $conf;
+
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
-		$myInput = array();
+		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_leicasfsend_sendsf.'];
+		t3lib_div::debug($EMAIL_VARS, 'EMAIL_VARS');
+		// t3lib_div::debug($obj, 'obj');
+		t3lib_div::debug($GLOBALS['TSFE']->tmpl->setup, 'Alt2');
+		
+		$acceptedCountries = array(
+			'Germany' => true,
+			'United States ' => false 
+			);
+
+
 		// TODO: Check if country if allowed, otherwise don't do anything.
+	
+
+			if($EMAIL_VARS['Selectyourcountry:'] == $acceptedCountries & $permit){
 
 
-		// TODO: Only send Sales-Request to sf
+				// TODO: Only send Sales-Request to sf
 
-		// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
-		if($this->conf['enabled']) {
+				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
+				if($this->conf['enabled']) {
 
 
-			// File upload Path
-			// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
-			$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
-			if(!is_dir($filePath)){
-				mkdir($filePath, 0755, true);
-			}
-
-			// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
-			// and add a link to the XML
-			$fileCounter = 0;
-			foreach($_FILES as $key => $file) {
-
-				if($file['error'] == 0 && $file['size'] > 0) {
-
-					// Generate new file name
-					// -> [hash].[extension]
-					$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
-					$fileName = $this->unique_filename($fileExt);
-
-					// Move temp-file to upload directory
-					$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
-					if(!move_uploaded_file($file['tmp_name'], $destination)) {
-						$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
+					// File upload Path
+					// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
+					$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
+					if(!is_dir($filePath)){
+						mkdir($filePath, 0755, true);
 					}
 
-					// Add link to uploaded file to EMAIL_VARS / XML
-					$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
-					$fileCounter++;
-				}
-			}
+					// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
+					// and add a link to the XML
+					$fileCounter = 0;
+					foreach($_FILES as $key => $file) {
+
+						if($file['error'] == 0 && $file['size'] > 0) {
+
+							// Generate new file name
+							// -> [hash].[extension]
+							$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
+							$fileName = $this->unique_filename($fileExt);
+
+							// Move temp-file to upload directory
+							$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
+							if(!move_uploaded_file($file['tmp_name'], $destination)) {
+								$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
+							}
+
+							// Add link to uploaded file to EMAIL_VARS / XML
+							$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
+							$fileCounter++;
+						}
+					}
 
 
-			
-			
-			// Add FORM vars to XML
-			foreach ($EMAIL_VARS as $key => $value) {
-				// Ignore superfluous metadata
-				if (!($key == 'html_enabled' ||
-                        $key == 'subject' ||
-                        $key == 'recipient' ||
-                        $key == 'recipient_copy')) {
+					$fieldData = array(
+								'Inquiry_Type' => '00N20000007Lpgs',
+								'Area_of_Interest' => '00N20000007Lpr7',
+								'name' => '00N20000007LqJa',
+								'How_can_we_help_you' => '00N20000007Lqu7',
+								'CompanyInstitution' => 'company',
+								'email' => 'email',
+								'phone' => 'phone',
+								'zip' => 'zip',
+					);
 
-
+					$result = array(
+						'oid'=> '00D20000000n6sH',
+						'submit' => 'Submit+Query',
+						'retURL' => '#'
+					);
 					
+					
+					// Add FORM vars to XML
+					foreach ($EMAIL_VARS as $key => $value) {
+						// Ignore superfluous metadata
+						if (!($key == 'html_enabled' ||
+		                        $key == 'subject' ||
+		                        $key == 'recipient' ||
+		                        $key == 'recipient_copy')) {
+
+							foreach ($fieldData as $formularFieldName => $salesForceFieldName) {
+								if($key == $formularFieldName){
+									$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
+								}else{
+									$result[$key] = $value;
+								}
+							}
+
+							
+						}
+
+
+					}
 				}
-
-
 			}
 
  			
 
-			// TODO Send all data to SF
+			
 
 			// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
 
 			// Log event
         	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
 
-			$data = array(
-					// $this->settings
-					'00N20000007Lpgs' => $EMAIL_VARS['Inquiry_Type'],
-					'00N20000007Lpr7' => $EMAIL_VARS['Area_of_Interest'],
-					'00N20000007LqJa' => $EMAIL_VARS['name'],
-					'00N20000007Lqu7' => $EMAIL_VARS['How_can_we_help_you'],
-					'company' => $EMAIL_VARS['CompanyInstitution'],
-					'email' => $EMAIL_VARS['email'],
-					'oid'=> '00D20000000n6sH',
-					'phone' => $EMAIL_VARS['Phone_Number'],
-					'submit' => 'Submit+Query',
-					'zip' => $EMAIL_VARS['Zip_Code'],
-					'retURL' => '#',
-					);
+			$this->sendToSalesforce($result);
+			
 
-				sendToSalesforce($data);
-
-		}
+			$EMAIL_VARS = $result;
+		
 
 
-		echo t3lib_div::debug($this->conf['enabled'], 'TEST');
+		
 		return $EMAIL_VARS;
 	}
 
+	function sendToSalesforce($data){
+		$handle = curl_init();
 
+
+		$query_string = '';
+
+		foreach ($data as $key => $value) {
+			$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
+		}
+
+		curl_setopt_array( $handle,
+			array(
+				CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => $query_string,
+				)
+			);
+
+		curl_exec($handle);
+		curl_close($handle);
+	}
 	// Generate filename from IP microtime and Extension. Low chance of not being unique
 	function unique_filename($xtn = ".tmp") {
 		// explode the IP of the remote client into four parts
@@ -167,27 +214,7 @@ class tx_leicasfsend_sendsf {
 	}
 }
 
-function sendToSalesforce($data){
-	$handle = curl_init();
 
-
-	$query_string = '';
-
-	foreach ($data as $key => $value) {
-		$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
-	}
-
-	curl_setopt_array( $handle,
-		array(
-			CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $query_string,
-			)
-		);
-
-	curl_exec($handle);
-	curl_close($handle);
-}
 			
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php'])	{

@@ -6,6 +6,7 @@ plugin.tx_leicasfsend_sendsf {
 	logfile_path =
 
 
+	fields{
 		type = 00N20000007Lpgs
 		interest = 00N20000007Lpr7
 		name = 00N20000007LqJa
@@ -18,6 +19,6 @@ plugin.tx_leicasfsend_sendsf {
 
 		oid = 00D20000000n6sH
 		submit = Submit+Query
-	
+		}
 
 }

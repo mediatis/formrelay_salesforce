@@ -1,0 +1,19 @@
+plugin.tx_leicasfsend_sendsf {
+	enabled = {$plugin.tx_leicasfsend_sendsf.enabled}
+	logfile_path = {$plugin.tx_leicasfsend_sendsf.logfile_path}
+
+	fields{
+		type = {$plugin.tx_leicasfsend_sendsf.fields.type}
+		interest = {$plugin.tx_leicasfsend_sendsf.fields.interest}
+		name = {$plugin.tx_leicasfsend_sendsf.fields.name}
+		text = {$plugin.tx_leicasfsend_sendsf.fields.text}
+		company = {$plugin.tx_leicasfsend_sendsf.fields.company}
+		email = {$plugin.tx_leicasfsend_sendsf.fields.email}
+		oid = {$plugin.tx_leicasfsend_sendsf.fields.oid}
+		phone = {$plugin.tx_leicasfsend_sendsf.fields.phone}
+		submit = {$plugin.tx_leicasfsend_sendsf.fields.submit}
+		zip = {$plugin.tx_leicasfsend_sendsf.fields.zip}
+		retURL = {$plugin.tx_leicasfsend_sendsf.fields.retURL}
+	}
+
+}
