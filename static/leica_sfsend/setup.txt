@@ -15,7 +15,7 @@ plugin.tx_leicasfsend_sendsf {
 
 	neededParameters {
 		country = United States
-		Inquiry_Type = Request a Quote, Request for Product Information
+		Inquiry_Type = Request a Quote,Request for Product Information
 	}
 
 	 fieldData {

@@ -77,9 +77,12 @@ class tx_leicasfsend_sendsf {
     function isFieldAccepted($mailParameter){
     	// t3lib_div::debug($this->tsConf, 'tsConf');
     	foreach ($this->tsConf['neededParameters.'] as $key => $value) {
-    		t3lib_div::debug($key, 'tsConf');
+    		//t3lib_div::debug($key, 'tsConf');
     		if(isset($mailParameter[$key])){
-    			if(strpos($value, $mailParameter[$key]) === false){
+
+
+    			$expl = explode(',', $value);
+    			if(in_array($value, $expl, false) === false){
     				return false;
     			}
     		}else{
@@ -91,9 +94,6 @@ class tx_leicasfsend_sendsf {
 
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
 
-				t3lib_div::debug($EMAIL_VARS, 'normal');
-				unset($EMAIL_VARS['recipient']);
-				t3lib_div::debug($EMAIL_VARS, 'Gelöscht');
 
 
 				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
@@ -151,14 +151,6 @@ class tx_leicasfsend_sendsf {
 							}else{
 								$result[$key] = $value;
 							}
-
-							// foreach ($this->tsConf['fieldData.'] as $formularFieldName => $salesForceFieldName) {
-							// 	if($key == $formularFieldName){
-							// 		$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
-							// 	}else{
-							// 		$result[$key] = $value;
-							// 	}
-							// }
 						}
 					}
 				}
