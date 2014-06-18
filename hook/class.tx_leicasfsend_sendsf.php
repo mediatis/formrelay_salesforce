@@ -35,28 +35,58 @@ class tx_leicasfsend_sendsf {
 
 	private $conf;
 
+
+	private	$acceptedCountries = array(
+		'Germany' => true, 
+		'United States ' => false 
+		);
+
+	private $acceptedInquiryType = array(
+		'Request a Quote' => true,
+		'Request for Product Information' => true,
+		);
+
+
+	private $selectionParameter = array(
+		'countryField' => 'Selectyourcountry:',
+		'activityField' => 'Inquiry_Type'
+		);
+
+
+
+
+
+	private $connectionData = array(
+				'oid'=> '00D20000000n6sH',
+				'submit' => 'Submit+Query',
+				'retURL' => '#'
+				);
+
+	private $fieldData = array(
+		'Inquiry_Type' => '00N20000007Lpgs',
+		'Area_of_Interest' => '00N20000007Lpr7',
+		'name' => 'last_name',
+		'How_can_we_help_you' => '00N20000007Lqu7',
+		'CompanyInstitution' => 'company',
+		'email' => 'email',
+		'Phone_Number' => 'phone',
+		'Zip_Code' => 'zip',
+		);
+
+
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_leicasfsend_sendsf.'];
 		t3lib_div::debug($EMAIL_VARS, 'EMAIL_VARS');
-		// t3lib_div::debug($obj, 'obj');
-		t3lib_div::debug($GLOBALS['TSFE']->tmpl->setup, 'Alt2');
 		
-		$acceptedCountries = array(
-			'Germany' => true,
-			'United States ' => false 
-			);
 
 
-		// TODO: Check if country if allowed, otherwise don't do anything.
 	
 
-			if($EMAIL_VARS['Selectyourcountry:'] == $acceptedCountries & $permit){
-
-
-				// TODO: Only send Sales-Request to sf
+			if($this->acceptedCountries[$EMAIL_VARS[$this->selectionParameter['countryField']]] & $this->acceptedInquiryType[$EMAIL_VARS[$this->selectionParameter['activityField']]]){
 
 				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
-				if($this->conf['enabled']) {
+				// if($this->conf['enabled']) {
+				if(true) {
 
 
 					// File upload Path
@@ -91,25 +121,9 @@ class tx_leicasfsend_sendsf {
 					}
 
 
-					$fieldData = array(
-								'Inquiry_Type' => '00N20000007Lpgs',
-								'Area_of_Interest' => '00N20000007Lpr7',
-								'name' => '00N20000007LqJa',
-								'How_can_we_help_you' => '00N20000007Lqu7',
-								'CompanyInstitution' => 'company',
-								'email' => 'email',
-								'phone' => 'phone',
-								'zip' => 'zip',
-					);
 
-					$result = array(
-						'oid'=> '00D20000000n6sH',
-						'submit' => 'Submit+Query',
-						'retURL' => '#'
-					);
-					
-					
-					// Add FORM vars to XML
+					$result = $this->connectionData;
+
 					foreach ($EMAIL_VARS as $key => $value) {
 						// Ignore superfluous metadata
 						if (!($key == 'html_enabled' ||
@@ -117,18 +131,14 @@ class tx_leicasfsend_sendsf {
 		                        $key == 'recipient' ||
 		                        $key == 'recipient_copy')) {
 
-							foreach ($fieldData as $formularFieldName => $salesForceFieldName) {
+							foreach ($this->fieldData as $formularFieldName => $salesForceFieldName) {
 								if($key == $formularFieldName){
 									$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
 								}else{
 									$result[$key] = $value;
 								}
-							}
-
-							
+							}	
 						}
-
-
 					}
 				}
 			}
@@ -154,15 +164,15 @@ class tx_leicasfsend_sendsf {
 	}
 
 	function sendToSalesforce($data){
+		
 		$handle = curl_init();
-
-
+		
 		$query_string = '';
-
+		
 		foreach ($data as $key => $value) {
 			$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
 		}
-
+		
 		curl_setopt_array( $handle,
 			array(
 				CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
@@ -174,6 +184,8 @@ class tx_leicasfsend_sendsf {
 		curl_exec($handle);
 		curl_close($handle);
 	}
+
+
 	// Generate filename from IP microtime and Extension. Low chance of not being unique
 	function unique_filename($xtn = ".tmp") {
 		// explode the IP of the remote client into four parts
