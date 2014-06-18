@@ -33,60 +33,73 @@
  */
 class tx_leicasfsend_sendsf {
 
-	private $conf;
+
+	private $neededParameters = array(
+		'Selectyourcountry:' => 'United States',
+		'Inquiry_Type' => 'Request a Quote, Request for Product Information'
+	);
 
 
-	private	$acceptedCountries = array(
-		'Germany' => true, 
-		'United States ' => false 
-		);
+	private $tsConf;
+	/**
+	 * Constructor
+	 *
+	 * @return void
+	 */
+	public function __construct() {
 
-	private $acceptedInquiryType = array(
-		'Request a Quote' => true,
-		'Request for Product Information' => true,
-		);
+		$this->tsConf  = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_leicasfsend_sendsf.'];
+        if(!$this->tsConf ) {
+            $tsSetup = $this->loadTS($GLOBALS['TSFE']->id);
+            $this->tsConf  = $tsSetup['plugin.']['tx_leicasfsend_sendsf.'];
+        }
 
-
-	private $selectionParameter = array(
-		'countryField' => 'Selectyourcountry:',
-		'activityField' => 'Inquiry_Type'
-		);
-
-
+	}
 
 
+    /**
+     * Get TypoScript configuration for a specific page
+     *
+     * @param integer $pageId: Page id
+     * @return array: TS Setup
+     */
+    function loadTS($pageId) {
+        $pS = t3lib_div::makeInstance('t3lib_pageSelect');
+        tslib_fe::includeTCA();
+        $TSObj = t3lib_div::makeInstance('t3lib_TStemplate');
+        $TSObj->tt_track = 0;
+        $TSObj->init();
+        $TSObj->start($pS->getRootline((int)$pageId));
+        return $TSObj->setup;
+    }
 
-	private $connectionData = array(
-				'oid'=> '00D20000000n6sH',
-				'submit' => 'Submit+Query',
-				'retURL' => '#'
-				);
 
-	private $fieldData = array(
-		'Inquiry_Type' => '00N20000007Lpgs',
-		'Area_of_Interest' => '00N20000007Lpr7',
-		'name' => 'last_name',
-		'How_can_we_help_you' => '00N20000007Lqu7',
-		'CompanyInstitution' => 'company',
-		'email' => 'email',
-		'Phone_Number' => 'phone',
-		'Zip_Code' => 'zip',
-		);
-
+    function isFieldAccepted($mailParameter){
+    	// t3lib_div::debug($this->tsConf, 'tsConf');
+    	foreach ($this->tsConf['neededParameters.'] as $key => $value) {
+    		t3lib_div::debug($key, 'tsConf');
+    		if(isset($mailParameter[$key])){
+    			if(strpos($value, $mailParameter[$key]) === false){
+    				return false;
+    			}
+    		}else{
+    			return false;
+    		}
+    	}
+    	return true;
+    }
 
 	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
-		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_leicasfsend_sendsf.'];
-		t3lib_div::debug($EMAIL_VARS, 'EMAIL_VARS');
-		
 
+				t3lib_div::debug($EMAIL_VARS, 'normal');
+				unset($EMAIL_VARS['recipient']);
+				t3lib_div::debug($EMAIL_VARS, 'Gelöscht');
 
-	
-
-			if($this->acceptedCountries[$EMAIL_VARS[$this->selectionParameter['countryField']]] & $this->acceptedInquiryType[$EMAIL_VARS[$this->selectionParameter['activityField']]]){
 
 				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
-				// if($this->conf['enabled']) {
-				if(true) {
+				if($this->tsConf['enabled']) {
+
+					if($this->isFieldAccepted($EMAIL_VARS)){
 
 
 					// File upload Path
@@ -122,7 +135,7 @@ class tx_leicasfsend_sendsf {
 
 
 
-					$result = $this->connectionData;
+					$result = $this->tsConf['connectionData.'];
 
 					foreach ($EMAIL_VARS as $key => $value) {
 						// Ignore superfluous metadata
@@ -131,48 +144,52 @@ class tx_leicasfsend_sendsf {
 		                        $key == 'recipient' ||
 		                        $key == 'recipient_copy')) {
 
-							foreach ($this->fieldData as $formularFieldName => $salesForceFieldName) {
-								if($key == $formularFieldName){
-									$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
-								}else{
-									$result[$key] = $value;
-								}
-							}	
+
+
+							if(isset($this->tsConf['fieldData.'][$key])){
+								$result[$this->tsConf['fieldData.'][$key]] = $EMAIL_VARS[$key];
+							}else{
+								$result[$key] = $value;
+							}
+
+							// foreach ($this->tsConf['fieldData.'] as $formularFieldName => $salesForceFieldName) {
+							// 	if($key == $formularFieldName){
+							// 		$result[$salesForceFieldName] = $EMAIL_VARS[$formularFieldName];
+							// 	}else{
+							// 		$result[$key] = $value;
+							// 	}
+							// }
 						}
 					}
 				}
 			}
 
- 			
 
-			
+
+
 
 			// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
 
 			// Log event
-        	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->conf['from_mail'], $recipient));
+        	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->tsConf['from_mail'], $recipient));
 
 			$this->sendToSalesforce($result);
-			
-
-			$EMAIL_VARS = $result;
-		
 
 
-		
+		unset($EMAIL_VARS['recipient']);
 		return $EMAIL_VARS;
 	}
 
 	function sendToSalesforce($data){
-		
+
 		$handle = curl_init();
-		
+
 		$query_string = '';
-		
+
 		foreach ($data as $key => $value) {
 			$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
 		}
-		
+
 		curl_setopt_array( $handle,
 			array(
 				CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
@@ -209,7 +226,7 @@ class tx_leicasfsend_sendsf {
 
 	// Write $data to logfile if $logfilepath is set in TS Config
 	function writeToLogfile($logtext) {
-		$logfilePath = $this->conf['logfile_path'];
+		$logfilePath = $this->tsConf['logfile_path'];
 
 		// Only write a logfile if path is set in TS Config and logtext is not empty
 		if(strlen($logtext) > 0 && strlen($logfilePath) > 0) {
@@ -227,7 +244,7 @@ class tx_leicasfsend_sendsf {
 }
 
 
-			
+
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/leica_sfsend/hook/class.tx_leicasfsend_sendsf.php']);

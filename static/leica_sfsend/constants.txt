@@ -1,24 +1,14 @@
-plugin.tx_leicasfsend_sendsf {
+plugin.tx_leicasfsend_sendsf{
 	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
     enabled = 1
 
 	# cat=plugin.tx_leicasfsend_sendsf//6; type=text; label= Logfile Path: Path to Logfile including logfilename and extension. eg. "/HOME/htdocs/uploads/tx_leicasfsend/logfile.xml". No Log will be written if not set.
 	logfile_path =
 
-
-	fields{
-		type = 00N20000007Lpgs
-		interest = 00N20000007Lpr7
-		name = 00N20000007LqJa
-		text = 00N20000007Lqu7
-		company = company
-		email = email
-		phone = phone
-		zip = zip
-		retURL = retURL
-
+	 connectionData {
 		oid = 00D20000000n6sH
 		submit = Submit+Query
-		}
+		retURL = #
+	}
 
 }
