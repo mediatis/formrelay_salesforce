@@ -158,7 +158,7 @@ class tx_leicasfsend_sendsf {
 
 	public function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
 
-		t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
+		//t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
 
 		// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
 		if (!$this->tsConf['enabled']) {
@@ -255,9 +255,9 @@ class tx_leicasfsend_sendsf {
 			CURLOPT_MAXREDIRS => 10,
 		);
 
-		t3lib_div::devLog('tx_leicaxmlsend_sendxml::sendToSalesforce', 'leica_sfsend');
-		t3lib_div::devLog('arguments: ' . print_r(func_get_args(), true), 'leica_sfsend');
-		t3lib_div::devLog('curl options: ' . print_r($curlOptions, true), 'leica_sfsend');
+		// t3lib_div::devLog('tx_leicaxmlsend_sendxml::sendToSalesforce', 'leica_sfsend');
+		// t3lib_div::devLog('arguments: ' . print_r(func_get_args(), true), 'leica_sfsend');
+		// t3lib_div::devLog('curl options: ' . print_r($curlOptions, true), 'leica_sfsend');
 
 		$handle = curl_init();
 
