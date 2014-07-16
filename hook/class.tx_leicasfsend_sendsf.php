@@ -34,12 +34,6 @@
 class tx_leicasfsend_sendsf {
 
 
-	private $neededParameters = array(
-		'Selectyourcountry:' => 'United States',
-		'Inquiry_Type' => 'Request a Quote, Request for Product Information'
-	);
-
-
 	private $tsConf;
 	/**
 	 * Constructor
@@ -73,122 +67,201 @@ class tx_leicasfsend_sendsf {
         return $TSObj->setup;
     }
 
+    private function validateForm($mailVars) {
 
-    function isFieldAccepted($mailParameter){
-    	// t3lib_div::debug($this->tsConf, 'tsConf');
-    	foreach ($this->tsConf['neededParameters.'] as $key => $value) {
-    		//t3lib_div::debug($key, 'tsConf');
-    		if(isset($mailParameter[$key])){
+    	foreach ($this->tsConf['fields.']['validation.']['values.'] as $key => $value) {
+    		if (!isset($mailVars[$key])) {
+    			return false;
+    		}
 
-
-    			$expl = explode(',', $value);
-    			if(in_array($value, $expl, false) === false){
-    				return false;
-    			}
-    		}else{
+    		$possibleValues = explode(',', strtolower($value));
+    		$currentValue = strtolower($mailVars[$key]);
+    		if (!in_array($currentValue, $possibleValues)) {
     			return false;
     		}
     	}
+
+    	if (trim($this->tsConf['fields.']['validation.']['required.']) !== '') {
+    		$requiredValues = explode(',', trim($this->tsConf['fields.']['validation.']['required.']));
+	    	foreach ($requiredValues as $requiredValue) {
+	    		if (!isset($mailVars[$requiredValue])) {
+	    			return false;
+	    		}
+	    	}
+	    }
     	return true;
     }
 
-	function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
+    private function processField(&$result, $key, $mappedValue, $mappedKey) {
 
+    	$keyPrefixIndex = strpos($mappedKey, ':');
+		$keyPrefix = false;
+		if ($keyPrefixIndex !== FALSE && $keyPrefixIndex > 0) {
+			$keyPrefix = substr($mappedKey, 0, $keyPrefixIndex);
+			$mappedKey = substr($mappedKey, $keyPrefixIndex + 1);
+		}
 
-
-				// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
-				if($this->tsConf['enabled']) {
-
-					if($this->isFieldAccepted($EMAIL_VARS)){
-
-
-					// File upload Path
-					// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
-					$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
-					if(!is_dir($filePath)){
-						mkdir($filePath, 0755, true);
-					}
-
-					// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
-					// and add a link to the XML
-					$fileCounter = 0;
-					foreach($_FILES as $key => $file) {
-
-						if($file['error'] == 0 && $file['size'] > 0) {
-
-							// Generate new file name
-							// -> [hash].[extension]
-							$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
-							$fileName = $this->unique_filename($fileExt);
-
-							// Move temp-file to upload directory
-							$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
-							if(!move_uploaded_file($file['tmp_name'], $destination)) {
-								$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
-							}
-
-							// Add link to uploaded file to EMAIL_VARS / XML
-							$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
-							$fileCounter++;
-						}
-					}
-
-
-
-					$result = $this->tsConf['connectionData.'];
-
-					foreach ($EMAIL_VARS as $key => $value) {
-						// Ignore superfluous metadata
-						if (!($key == 'html_enabled' ||
-		                        $key == 'subject' ||
-		                        $key == 'recipient' ||
-		                        $key == 'recipient_copy')) {
-
-
-
-							if(isset($this->tsConf['fieldData.'][$key])){
-								$result[$this->tsConf['fieldData.'][$key]] = $EMAIL_VARS[$key];
-							}else{
-								$result[$key] = $value;
-							}
-						}
-					}
+		switch ($keyPrefix) {
+			case 'split':
+				// explode the value using the space char as separator, split the result to the given fields
+				// example:
+				// mapping = 'split:first_name,last_name'
+				// value = 'John Doe' => result = array('first_name' => 'John', 'last_name' => 'Doe');
+				// value = 'John' => result = array('first_name' => 'John');
+				// value = 'John Doe Smith' => result = array('first_name' => 'John', 'last_name' => 'Doe Smith');
+				$valueSeparator = ' ';
+				$splitToFields = explode(',', $mappedKey);
+				$splittedValues = explode($valueSeparator, $mappedValue);
+				while (count($splitToFields) > 1 && count($splittedValues) > 0) {
+					// split for all fields but the last
+					$splittedField = array_shift($splitToFields);
+					$splittedValue = array_shift($splittedValues);
+					$this->processField($result, $key, $splittedValue, $splittedField);
 				}
+				if (count($splittedValues) > 0) {
+					// concat the remaining splitted values again and use them for the last field
+					$splittedField = array_shift($splitToFields);
+					$splittedValue = implode($valueSeparator, $splittedValues);
+					$this->processField($result, $key, $splittedValue, $splittedField);
+				}
+			break;
+
+			case 'fields':
+				// share the value with multiple fields
+				// example:
+				// mapping = 'fields:country,country_code'
+				// value = 'US' => result = array('country' => 'US', 'country_code' => 'US');
+				$sharedKeys = explode(',', $mappedKey);
+				foreach ($sharedKeys as $sharedKey) {
+					$this->processField($result, $key, $mappedValue, $sharedKey);
+				}
+			break;
+
+			case 'concat':
+				// concat the key-value-pair into one field (along with other pairs)
+				// example:
+				// mapping = 'concat:description'
+				// key = 'foo'; value = 'bar'
+				// followed by key = 'oof'; value = 'baz'
+				// result = array('description' => 'foo = bar
+				// oof = baz');
+				if (!isset($result[$mappedKey])) { $result[$mappedKey] = ''; }
+				$result[$mappedKey] .= $key . ' = ' . $mappedValue . PHP_EOL;
+			break;
+
+			default:
+				// just use the key and value as key and value
+				$result[$mappedKey] = $mappedValue;
+			break;
+		}
+    }
+
+	public function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
+
+		t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
+
+		// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
+		if (!$this->tsConf['enabled']) {
+			return $EMAIL_VARS;
+		}
+
+		if (!$this->validateForm($EMAIL_VARS)) {
+			return $EMAIL_VARS;
+		}
+
+		// File upload Path
+		// -> uploads/tx_leicasfsend/[year]/[month]/[day]/
+		$filePath = 'uploads/tx_leicasfsend/' . date('Y/m/d/');
+		if(!is_dir($filePath)){
+			mkdir($filePath, 0755, true);
+		}
+
+		// Move uploaded Files from temp-Directory to /uploads/tx_leicasfsend
+		// and add a link to the XML
+		$fileCounter = 0;
+		foreach($_FILES as $key => $file) {
+
+			if($file['error'] == 0 && $file['size'] > 0) {
+
+				// Generate new file name
+				// -> [hash].[extension]
+				$fileExt = strstr($file['name'], '.') ? strstr($file['name'], '.') : '';
+				$fileName = $this->unique_filename($fileExt);
+
+				// Move temp-file to upload directory
+				$destination =  getcwd() . '/'. $filePath . $fileName; // Absolute Path
+				if(!move_uploaded_file($file['tmp_name'], $destination)) {
+					$this->writeToLogfile(sprintf('Error trying to move uploaded file "%s" to %s', $file['tmp_name'], $destination));
+				}
+
+				// Add link to uploaded file to EMAIL_VARS / XML
+				$EMAIL_VARS[$key] = t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $filePath . $fileName; // URL
+				$fileCounter++;
+			}
+		}
+
+
+		// create salesforce data
+
+		$result = $this->tsConf['fields.']['defaults.'];
+
+		$metaDataKeys = explode(',', trim(strtolower($this->tsConf['fields.']['ignore'])));
+		foreach ($EMAIL_VARS as $key => $value) {
+
+			// ignore empty values (mostly hidden fields)
+			if (!trim($value)) { continue; }
+
+			// ignore superfluous metadata
+			if (in_array($key, $metaDataKeys)) { continue; }
+
+			// if a value mapping exists, use it
+			$mappedValue = $value;
+			if (isset($this->tsConf['fields.']['values.']['mapping.'][$key . '.'][$value])) {
+				$mappedValue = $this->tsConf['fields.']['values.']['mapping.'][$key . '.'][$value];
 			}
 
+			// if there is no mapping for the key, use the other-key
+			$mappedKey = isset($this->tsConf['fields.']['mapping.'][$key]) ? $this->tsConf['fields.']['mapping.'][$key] : $this->tsConf['fields.']['mappingOther'];
+
+			$this->processField($result, $key, $mappedValue, $mappedKey);
+		}
+
+		// Log event
+    	$this->writeToLogfile(sprintf('Sent lead to SalesForce for "%s"', $EMAIL_VARS['email']));
+
+		$this->sendToSalesforce($result);
 
 
-
-
-			// TODO: remove recipient from $EMAIL_VARS, to prevent mail delivery
-
-			// Log event
-        	$this->writeToLogfile(sprintf('Sent mail "%s" FROM %s TO %s', $subject, $this->tsConf['from_mail'], $recipient));
-
-			$this->sendToSalesforce($result);
-
-
-		unset($EMAIL_VARS['recipient']);
-		return $EMAIL_VARS;
+		return false;
 	}
 
 	function sendToSalesforce($data){
 
+		$params = array();
+		foreach ($data as $key => $value) {
+			$params[] = rawurlencode($key) . '=' . rawurlencode($value);
+			//$queryString .= '&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
+		}
+		$queryString = implode('&', $params);
+
+		$curlOptions = array(
+			CURLOPT_URL => $this->tsConf['salesForceUrl'],
+			CURLOPT_POST => TRUE,
+			CURLOPT_POSTFIELDS => $queryString,
+
+			CURLOPT_REFERER => $_SERVER['HTTP_REFERER'],
+			CURLOPT_RETURNTRANSFER => TRUE,
+			CURLOPT_FOLLOWLOCATION => TRUE,
+			CURLOPT_MAXREDIRS => 10,
+		);
+
+		t3lib_div::devLog('tx_leicaxmlsend_sendxml::sendToSalesforce', 'leica_sfsend');
+		t3lib_div::devLog('arguments: ' . print_r(func_get_args(), true), 'leica_sfsend');
+		t3lib_div::devLog('curl options: ' . print_r($curlOptions, true), 'leica_sfsend');
+
 		$handle = curl_init();
 
-		$query_string = '';
-
-		foreach ($data as $key => $value) {
-			$query_string = $query_string .'&'. $key .'=' . htmlspecialchars($value, ENT_QUOTES);
-		}
-
-		curl_setopt_array( $handle,
-			array(
-				CURLOPT_URL => 'https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8',
-				CURLOPT_POST => true,
-				CURLOPT_POSTFIELDS => $query_string,
-				)
-			);
+		curl_setopt_array($handle, $curlOptions);
 
 		curl_exec($handle);
 		curl_close($handle);

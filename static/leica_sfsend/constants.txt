@@ -1,14 +1,23 @@
 plugin.tx_leicasfsend_sendsf{
 	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
-    enabled = 1
+    enabled = 0
 
 	# cat=plugin.tx_leicasfsend_sendsf//6; type=text; label= Logfile Path: Path to Logfile including logfilename and extension. eg. "/HOME/htdocs/uploads/tx_leicasfsend/logfile.xml". No Log will be written if not set.
 	logfile_path =
 
-	 connectionData {
-		oid = 00D20000000n6sH
-		submit = Submit+Query
-		retURL = #
-	}
+	salesForceUrl =
 
+	fields {
+	 	defaults {
+			oid =
+			submit = Submit+Query
+			retURL = #
+			lead_source = Web - Contact Us Page
+		}
+		salesforceCustomFields {
+			inquiry_type = 00NG000000DoPU4
+			lead_description = 00NG000000DoM0U
+			contact_preference = 00NG000000DogfK
+		}
+	}
 }
