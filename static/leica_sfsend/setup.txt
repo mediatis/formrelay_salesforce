@@ -7,13 +7,18 @@ plugin.tx_leicasfsend_sendsf {
 	salesForceUrl = {$plugin.tx_leicasfsend_sendsf.salesForceUrl}
 
 	fields {
-
 		validation {
-			values {
-				country = us,ca
-				inquiry_type = quote_request,product_information
-			}
 			required = email
+
+			validWithNoFilters = 1
+			filters {
+				1 {
+					whitelist {
+						country = us,ca
+						inquiry_type = quote_request,product_information
+					}
+				}
+			}
 		}
 
 		defaults {
@@ -45,6 +50,7 @@ plugin.tx_leicasfsend_sendsf {
 		ignore = html_enabled,subject,recipient,recipient_copy
 
 		values {
+			ignoreIfEmpty = 1
 			mapping {
 				inquiry_type {
 					quote_request = Request a Quote
