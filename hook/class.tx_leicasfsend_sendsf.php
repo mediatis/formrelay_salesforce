@@ -47,6 +47,7 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 			return $EMAIL_VARS;
 		}
 
+		// currently only the leica_xmlsend hook may use uploaded files. as soon as this shall change, we need to handle uploads in the meta hook
 		//$this->moveUploadedFiles($EMAIL_VARS, 'uploads/tx_leicasfsend/');
 
 		// create salesforce data
