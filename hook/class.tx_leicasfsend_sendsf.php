@@ -36,7 +36,7 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 
 	public function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
 
-		// t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
+		//t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
 
 		// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
 		if (!$this->conf['enabled']) {

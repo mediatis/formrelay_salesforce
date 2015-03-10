@@ -36,6 +36,7 @@ plugin.tx_leicasfsend_sendsf {
 			how_can_we_help_you = concat:{$plugin.tx_leicasfsend_sendsf.fields.salesforceCustomFields.lead_description}
 
 			first_name = split:first_name,last_name
+			last_name = last_name
 			company = company
 			email = email
 			phone = phone
@@ -46,6 +47,14 @@ plugin.tx_leicasfsend_sendsf {
 			contact_preference = {$plugin.tx_leicasfsend_sendsf.fields.salesforceCustomFields.contact_preference}
 	 	}
 		mappingOther = concat:description
+		specialMapping {
+			last_name {
+				valuesNot =
+				mapping {
+					first_name = first_name
+				}
+			}
+		}
 
 		ignore = html_enabled,subject,recipient,recipient_copy
 
