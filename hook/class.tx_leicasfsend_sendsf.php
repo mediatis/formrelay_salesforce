@@ -57,8 +57,6 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 			$this->addLanguageCode($EMAIL_VARS);
 		}
 
-		t3lib_div::devLog('SF EMAIL_VARS: ' . print_r($EMAIL_VARS, true), 'leica_sfsend');
-
 		// create salesforce data
 		$result = $this->processAllFields($EMAIL_VARS);
 
