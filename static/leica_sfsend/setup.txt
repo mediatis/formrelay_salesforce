@@ -6,7 +6,13 @@ plugin.tx_leicasfsend_sendsf {
 
 	salesForceUrl = {$plugin.tx_leicasfsend_sendsf.salesForceUrl}
 
+	addGoogleAnalyticsCookies = {$plugin.tx_leicasfsend_sendsf.addGoogleAnalyticsCookies}
+	addAdwordsKeywords = {$plugin.tx_leicasfsend_sendsf.addAdwordsKeywords}
+	addLanguageCode = {$plugin.tx_leicasfsend_sendsf.addLanguageCode}
+
 	fields {
+		removeFieldNameParts =
+
 		validation {
 			required = email
 

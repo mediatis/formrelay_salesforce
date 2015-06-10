@@ -36,7 +36,7 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 
 	public function sendFormmail_preProcessVariables($EMAIL_VARS, &$obj){
 
-		//t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
+		t3lib_div::devLog('tx_leicasfsend_sendsf::sendFormmail_preProcessVariables', 'leica_sfsend');
 
 		// Do nothing, if plugin.tx_leicasfsend_sendsf.enabled is not set to true
 		if (!$this->conf['enabled']) {
@@ -47,14 +47,23 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 			return $EMAIL_VARS;
 		}
 
-		// currently only the leica_xmlsend hook may use uploaded files. as soon as this shall change, we need to handle uploads in the meta hook
-		//$this->moveUploadedFiles($EMAIL_VARS, 'uploads/tx_leicasfsend/');
+		if ($this->conf['addGoogleAnalyticsCookies']) {
+			$this->addGoogleAnalyticsCookies($EMAIL_VARS);
+		}
+		if ($this->conf['addAdwordsKeywords']) {
+			$this->addAdwordsKeywords($EMAIL_VARS);
+		}
+		if ($this->conf['addLanguageCode']) {
+			$this->addLanguageCode($EMAIL_VARS);
+		}
+
+		t3lib_div::devLog('SF EMAIL_VARS: ' . print_r($EMAIL_VARS, true), 'leica_sfsend');
 
 		// create salesforce data
 		$result = $this->processAllFields($EMAIL_VARS);
 
-		// Log event
-    	$this->writeToLogfile(sprintf('Sent lead to SalesForce for "%s"', $EMAIL_VARS['email']));
+		t3lib_div::devLog('data sent to SalesForce', 'leica_sfsend');
+		t3lib_div::devLog(print_r(array('url' => $this->conf['salesForceUrl'], 'data' => $result), true), 'leica_sfsend');
 
 		$this->sendToSalesforce($result);
 

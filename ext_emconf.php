@@ -29,11 +29,11 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '0.0.4',
+	'version' => '0.0.5',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
-			'leica_sendform' => '0.0.2',
+			'leica_sendform' => '0.0.6',
 		),
 		'conflicts' => array(
 		),
