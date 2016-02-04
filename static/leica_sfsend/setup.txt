@@ -78,5 +78,14 @@ plugin.tx_leicasfsend_sendsf {
 			}
 		}
 	}
-
+	
+	configurationOverwrite {
+		quotationbasket {
+			enabled = {$plugin.tx_leicasfsend_sendsf.enabled}
+			logfile_path = {$plugin.tx_leicasfsend_sendsf.logfile_path}
+			fields {
+				mapping > plugin.tx_leicasfsend_sendsf.fields.mapping
+			}
+		}
+	}
 }
