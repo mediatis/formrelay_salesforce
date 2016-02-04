@@ -78,13 +78,18 @@ plugin.tx_leicasfsend_sendsf {
 			}
 		}
 	}
-	
+
 	configurationOverwrite {
+		quotationbasket < plugin.tx_leicasfsend_sendsf
 		quotationbasket {
-			enabled = {$plugin.tx_leicasfsend_sendsf.enabled}
-			logfile_path = {$plugin.tx_leicasfsend_sendsf.logfile_path}
 			fields {
-				mapping > plugin.tx_leicasfsend_sendsf.fields.mapping
+				validation >
+				validation.validWithNoFilters = 1
+				mapping.first_name = first_name
+				specialMapping >
+				mappingOther = concat:{$plugin.tx_leicasfsend_sendsf.fields.salesforceCustomFields.lead_description}
+				ignore >
+				values >
 			}
 		}
 	}
