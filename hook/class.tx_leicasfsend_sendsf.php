@@ -60,6 +60,10 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 		// create salesforce data
 		$result = $this->processAllFields($EMAIL_VARS);
 
+		// Send Debug info to you email address
+		// $result['debug'] = 1;
+		// $result['debugEmail'] = "voehringer@mediatis.de";
+
 		t3lib_div::devLog('data sent to SalesForce', 'leica_sfsend');
 		t3lib_div::devLog(print_r(array('url' => $this->conf['salesForceUrl'], 'data' => $result), true), 'leica_sfsend');
 
@@ -69,6 +73,7 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 	}
 
 	function sendToSalesforce($data){
+
 
 		$params = array();
 		foreach ($data as $key => $value) {
