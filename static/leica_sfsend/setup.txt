@@ -49,6 +49,9 @@ plugin.tx_leicasfsend_sendsf {
 			zip = zip
 			country = country_code
 			city = city
+			street_address1 = append:street
+			street_address2 = append:street
+			fax = fax
 			#country = fields:country,country_code
 
 			contact_preference = {$plugin.tx_leicasfsend_sendsf.fields.salesforceCustomFields.contact_preference}
