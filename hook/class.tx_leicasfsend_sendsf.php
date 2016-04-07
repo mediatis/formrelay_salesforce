@@ -47,15 +47,7 @@ class tx_leicasfsend_sendsf extends tx_leicasendform_abstracthook {
 			return $EMAIL_VARS;
 		}
 
-		if ($this->conf['addGoogleAnalyticsCookies']) {
-			$this->addGoogleAnalyticsCookies($EMAIL_VARS);
-		}
-		if ($this->conf['addAdwordsKeywords']) {
-			$this->addAdwordsKeywords($EMAIL_VARS);
-		}
-		if ($this->conf['addLanguageCode']) {
-			$this->addLanguageCode($EMAIL_VARS);
-		}
+		$this->addMetaData($EMAIL_VARS);
 
 		// create salesforce data
 		$result = $this->processAllFields($EMAIL_VARS);
