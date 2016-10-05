@@ -1,4 +1,4 @@
-plugin.tx_leicasfsend_sendsf{
+plugin.tx_formrealy_salesforce{
 	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
     enabled = 0
 

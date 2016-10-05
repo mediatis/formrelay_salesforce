@@ -1,0 +1,89 @@
+plugin.tx_formrealy_salesforce {
+
+	enabled = {$plugin.tx_formrealy_salesforce.enabled}
+
+	logfile_path = {$plugin.tx_formrealy_salesforce.logfile_path}
+
+	salesForceUrl = {$plugin.tx_formrealy_salesforce.salesForceUrl}
+
+	addGoogleAnalyticsCookies = {$plugin.tx_formrealy_salesforce.addGoogleAnalyticsCookies}
+	addAdwordsKeywords = {$plugin.tx_formrealy_salesforce.addAdwordsKeywords}
+	addLanguageCode = {$plugin.tx_formrealy_salesforce.addLanguageCode}
+	addPardotCookies = {$plugin.tx_formrealy_salesforce.addPardotCookies}
+
+	fields {
+		removeFieldNameParts =
+
+		validation {
+			required = email
+
+			validWithNoFilters = 1
+			filters {
+				1 {
+					whitelist {
+						country = us,ca
+						inquiry_type = quote_request,product_information
+					}
+				}
+			}
+		}
+
+		defaults {
+			oid = {$plugin.tx_formrealy_salesforce.fields.defaults.oid}
+			submit = {$plugin.tx_formrealy_salesforce.fields.defaults.submit}
+			retURL = {$plugin.tx_formrealy_salesforce.fields.defaults.retURL}
+			lead_source = {$plugin.tx_formrealy_salesforce.fields.defaults.lead_source}
+		}
+
+		mapping {
+
+			inquiry_type = {$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.inquiry_type}
+
+			area_of_interest = concat:{$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.lead_description}
+			how_can_we_help_you = concat:{$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.lead_description}
+
+			first_name = split:first_name,last_name
+			last_name = last_name
+			company = company
+			email = email
+			phone = phone
+			zip = zip
+			country = country_code
+			city = city
+			street_address1 = append:street
+			street_address2 = append:street
+			fax = fax
+			#country = fields:country,country_code
+
+			contact_preference = {$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.contact_preference}
+	 	}
+		mappingOther = concat:{$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.lead_description}
+		specialMapping {
+			last_name {
+				valuesNot =
+				mapping {
+					first_name = first_name
+				}
+			}
+		}
+
+		ignore = html_enabled,subject,recipient,recipient_copy
+
+		values {
+			ignoreIfEmpty = 1
+			mapping {
+				inquiry_type {
+					quote_request = Request a Quote
+					product_information = Request Product Information
+				}
+				contact_preference {
+					email = Email
+					phone = Phone
+				}
+			}
+		}
+	}
+
+	configurationOverwrite {
+	}
+}
