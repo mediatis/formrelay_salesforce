@@ -36,17 +36,21 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 {
 
 
+
 	public function processData($data){
 
 		GeneralUtility::devLog('SalesForce::processData', __CLASS__, 0);
+		GeneralUtility::devLog('SalesForce::config', __CLASS__, 0, $this->conf);
 
 		// Do nothing, if plugin.tx_formrelay_salesforce.enabled is not set to true
 		if (!$this->conf['enabled']) {
-			return $data;
+			GeneralUtility::devLog('SalesForce::processData not enabled', __CLASS__, 0);
+			return FALSE;
 		}
 
 		if (!$this->validateForm($data)) {
-			return $data;
+			GeneralUtility::devLog('SalesForce::processData validation error', __CLASS__, 0);
+			return FALSE;
 		}
 
 		// create salesforce data
@@ -56,12 +60,16 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 	}
 
 	private function sendToSalesforce($data){
+		GeneralUtility::devLog('SalesForce::sendToSalesforce', __CLASS__, 0, $data);
+		$retval = TRUE;
 
 		$params = array();
 		foreach ($data as $key => $value) {
 			$params[] = rawurlencode($key) . '=' . rawurlencode($value);
 		}
 		$queryString = implode('&', $params);
+
+		GeneralUtility::devLog('SalesForce::sendToSalesforce queryString', __CLASS__, 0, $queryString);
 
 		$curlOptions = array(
 			CURLOPT_URL => $this->conf['salesForceUrl'],
@@ -70,7 +78,7 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 
 			CURLOPT_REFERER => $_SERVER['HTTP_REFERER'],
 			CURLOPT_RETURNTRANSFER => TRUE,
-			CURLOPT_FOLLOWLOCATION => TRUE,
+			CURLOPT_VERBOSE => TRUE,
 			CURLOPT_MAXREDIRS => 10,
 		);
 
@@ -78,8 +86,21 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 
 		curl_setopt_array($handle, $curlOptions);
 
-		curl_exec($handle);
+		$result =  curl_exec($handle);
+
+		if($result === FALSE){
+			GeneralUtility::devLog('SalesForce::curl error', __CLASS__, 0, curl_error($handle));
+			$retval = FALSE;
+		}
+
 		curl_close($handle);
+
+		return $retval;
+	}
+
+
+	protected function getTsKey() {
+		return "tx_formrealy_salesforce";
 	}
 }
 

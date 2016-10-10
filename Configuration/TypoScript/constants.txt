@@ -1,23 +1,26 @@
 plugin.tx_formrealy_salesforce{
 	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
-    enabled = 0
+    enabled = 1
 
-	# cat=plugin.tx_leicasfsend_sendsf//6; type=text; label= Logfile Path: Path to Logfile including logfilename and extension. eg. "/HOME/htdocs/uploads/tx_leicasfsend/logfile.xml". No Log will be written if not set.
-	logfile_path =
-
-	salesForceUrl =
+    # SFDC Sandbox
+	# salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
+	salesForceUrl = https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 
 	fields {
 	 	defaults {
 			oid =
 			submit = Submit+Query
-			retURL = #
-			lead_source = Web - Contact Us Page
+			retURL = https://www.mediatis.de
+			lead_source = Web - TYPO3 formrelay
+
+			# enable SFDC web-2-lead debug mails
+			# debug = 1
+			# debugEmail = your@mail.com
 		}
 		salesforceCustomFields {
-			inquiry_type = 00NG000000DoPU4
-			lead_description = 00NG000000DoM0U
-			contact_preference = 00NG000000DogfK
+			field1 = 00NG000000DoPU4
+			field2 = 00NG000000DoM0U
+			field3 = 00NG000000DogfK
 		}
 	}
 }
