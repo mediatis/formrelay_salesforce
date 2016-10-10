@@ -23,6 +23,8 @@ namespace Mediatis\FormrelaySalesforce\Hooks;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Plugin Send form data to SourceFoce.com
  *
@@ -30,35 +32,30 @@ namespace Mediatis\FormrelaySalesforce\Hooks;
  * @package	TYPO3
  * @subpackage	leica_sfsend
  */
-class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \Mediatis\Formrelay\Hook
+class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \Mediatis\Formrelay\DataProcessorInterface
 {
 
 
-	public function processData($EMAIL_VARS){
+	public function processData($data){
 
-		t3lib_div::devLog('tx_formrelay_salesforce::processData', 'leica_sfsend');
+		GeneralUtility::devLog('SalesForce::processData', __CLASS__, 0);
 
 		// Do nothing, if plugin.tx_formrelay_salesforce.enabled is not set to true
 		if (!$this->conf['enabled']) {
-			return $EMAIL_VARS;
+			return $data;
 		}
 
-		if (!$this->validateForm($EMAIL_VARS)) {
-			return $EMAIL_VARS;
+		if (!$this->validateForm($data)) {
+			return $data;
 		}
-
-		$this->addMetaData($EMAIL_VARS);
 
 		// create salesforce data
-		$result = $this->processAllFields($EMAIL_VARS);
+		$result = $this->processAllFields($data);
 
-		$this->sendToSalesforce($result);
-
-		return false;
+		return $this->sendToSalesforce($result);
 	}
 
 	private function sendToSalesforce($data){
-
 
 		$params = array();
 		foreach ($data as $key => $value) {
@@ -76,10 +73,6 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 			CURLOPT_FOLLOWLOCATION => TRUE,
 			CURLOPT_MAXREDIRS => 10,
 		);
-
-		// t3lib_div::devLog('tx_leicaxmlsend_sendxml::sendToSalesforce', 'leica_sfsend');
-		// t3lib_div::devLog('arguments: ' . print_r(func_get_args(), true), 'leica_sfsend');
-		// t3lib_div::devLog('curl options: ' . print_r($curlOptions, true), 'leica_sfsend');
 
 		$handle = curl_init();
 

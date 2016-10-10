@@ -7,11 +7,6 @@ plugin.tx_formrealy_salesforce{
 
 	salesForceUrl =
 
-	addGoogleAnalyticsCookies = 0
-	addAdwordsKeywords = 0
-	addLanguageCode = 0
-	addPardotCookies = 0
-
 	fields {
 	 	defaults {
 			oid =

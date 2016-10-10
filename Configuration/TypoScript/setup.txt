@@ -6,11 +6,6 @@ plugin.tx_formrealy_salesforce {
 
 	salesForceUrl = {$plugin.tx_formrealy_salesforce.salesForceUrl}
 
-	addGoogleAnalyticsCookies = {$plugin.tx_formrealy_salesforce.addGoogleAnalyticsCookies}
-	addAdwordsKeywords = {$plugin.tx_formrealy_salesforce.addAdwordsKeywords}
-	addLanguageCode = {$plugin.tx_formrealy_salesforce.addLanguageCode}
-	addPardotCookies = {$plugin.tx_formrealy_salesforce.addPardotCookies}
-
 	fields {
 		removeFieldNameParts =
 
