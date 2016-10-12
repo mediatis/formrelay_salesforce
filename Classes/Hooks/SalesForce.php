@@ -35,21 +35,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \Mediatis\Formrelay\DataProcessorInterface
 {
 
+	public function processData($data)
+	{
 
-
-	public function processData($data){
-
-		GeneralUtility::devLog('SalesForce::processData', __CLASS__, 0);
-		GeneralUtility::devLog('SalesForce::config', __CLASS__, 0, $this->conf);
+		// GeneralUtility::devLog('SalesForce::processData', __CLASS__, 0);
+		// GeneralUtility::devLog('SalesForce::config', __CLASS__, 0, $this->conf);
 
 		// Do nothing, if plugin.tx_formrelay_salesforce.enabled is not set to true
 		if (!$this->conf['enabled']) {
-			GeneralUtility::devLog('SalesForce::processData not enabled', __CLASS__, 0);
+			// GeneralUtility::devLog('SalesForce::processData not enabled', __CLASS__, 0);
 			return FALSE;
 		}
 
 		if (!$this->validateForm($data)) {
-			GeneralUtility::devLog('SalesForce::processData validation error', __CLASS__, 0);
+			// GeneralUtility::devLog('SalesForce::processData validation error', __CLASS__, 0);
 			return FALSE;
 		}
 
@@ -59,8 +58,9 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 		return $this->sendToSalesforce($result);
 	}
 
-	private function sendToSalesforce($data){
-		GeneralUtility::devLog('SalesForce::sendToSalesforce', __CLASS__, 0, $data);
+	private function sendToSalesforce($data)
+	{
+		// GeneralUtility::devLog('SalesForce::sendToSalesforce', __CLASS__, 0, $data);
 		$retval = TRUE;
 
 		$params = array();
@@ -69,7 +69,7 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 		}
 		$queryString = implode('&', $params);
 
-		GeneralUtility::devLog('SalesForce::sendToSalesforce queryString', __CLASS__, 0, $queryString);
+		// GeneralUtility::devLog('SalesForce::sendToSalesforce queryString', __CLASS__, 0, $queryString);
 
 		$curlOptions = array(
 			CURLOPT_URL => $this->conf['salesForceUrl'],
@@ -89,7 +89,7 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 		$result =  curl_exec($handle);
 
 		if($result === FALSE){
-			GeneralUtility::devLog('SalesForce::curl error', __CLASS__, 0, curl_error($handle));
+			// GeneralUtility::devLog('SalesForce::curl error', __CLASS__, 0, curl_error($handle));
 			$retval = FALSE;
 		}
 
@@ -98,8 +98,8 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 		return $retval;
 	}
 
-
-	protected function getTsKey() {
+	protected function getTsKey()
+	{
 		return "tx_formrealy_salesforce";
 	}
 }

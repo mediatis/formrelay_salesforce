@@ -55,7 +55,7 @@ plugin.tx_formrealy_salesforce {
 			}
 		}
 
-		ignore = html_enabled,subject,recipient,recipient_copy
+		ignore = html_enabled,subject,recipient,recipient_copy,submit,password
 
 		values {
 			ignoreIfEmpty = 1

@@ -10,8 +10,9 @@ plugin.tx_formrealy_salesforce{
 	 	defaults {
 			oid =
 			submit = Submit+Query
-			retURL = https://www.mediatis.de
+			retURL = #
 			lead_source = Web - TYPO3 formrelay
+			encoding = UTF-8
 
 			# enable SFDC web-2-lead debug mails
 			# debug = 1
