@@ -29,6 +29,7 @@ plugin.tx_formrealy_salesforce {
 		}
 
 		mapping {
+			# form-field  -> sdfc-field
 			first_name = split:first_name,last_name
 			last_name = last_name
 			company = company
@@ -55,7 +56,7 @@ plugin.tx_formrealy_salesforce {
 			}
 		}
 
-		ignore = html_enabled,subject,recipient,recipient_copy,submit,password
+		ignore = html_enabled,subject,recipient,recipient_copy,submit,password,randomID
 
 		values {
 			ignoreIfEmpty = 1
