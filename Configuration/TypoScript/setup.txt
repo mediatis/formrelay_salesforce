@@ -33,6 +33,7 @@ plugin.tx_formrealy_salesforce {
 			first_name = split:first_name,last_name
 			last_name = last_name
 			company = company
+			department = department
 			email = email
 			phone = phone
 			zip = zip
@@ -40,8 +41,10 @@ plugin.tx_formrealy_salesforce {
 			city = city
 			street_address1 = append:street
 			street_address2 = append:street
+			street = street
 			fax = fax
 			language = language
+			lead_source = lead_source
 			#country = fields:country,country_code
 
 			#contact_preference = {$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.contact_preference}
@@ -56,7 +59,7 @@ plugin.tx_formrealy_salesforce {
 			}
 		}
 
-		ignore = html_enabled,subject,recipient,recipient_copy,submit,password,randomID
+		ignore.value = html_enabled,subject,recipient,recipient_copy,submit,password,password_again,randomID
 
 		values {
 			ignoreIfEmpty = 1
