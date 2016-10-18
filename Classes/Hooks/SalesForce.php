@@ -1,5 +1,6 @@
 <?php
 namespace Mediatis\FormrelaySalesforce\Hooks;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,7 +23,6 @@ namespace Mediatis\FormrelaySalesforce\Hooks;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -88,7 +88,7 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
 
         $result =  curl_exec($handle);
 
-        if($result === FALSE){
+        if ($result === FALSE){
             // GeneralUtility::devLog('SalesForce::curl error', __CLASS__, 0, curl_error($handle));
             $retval = FALSE;
         }
