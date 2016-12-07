@@ -18,10 +18,5 @@ plugin.tx_formrelay_salesforce{
 			# debug = 1
 			# debugEmail = your@mail.com
 		}
-		salesforceCustomFields {
-			field1 = 00NG000000DoPU4
-			field2 = 00NG000000DoM0U
-			field3 = 00NG000000DogfK
-		}
 	}
 }
