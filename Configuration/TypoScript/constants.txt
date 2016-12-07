@@ -1,5 +1,5 @@
-plugin.tx_formrealy_salesforce{
-	# cat=plugin.tx_leicasfsend_sendsf//1; type=int+; label= Enable: Only convert to XML if not set to 0.
+plugin.tx_formrelay_salesforce{
+	# cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable: Only convert to XML if not set to 0.
     enabled = 1
 
     # SFDC Sandbox

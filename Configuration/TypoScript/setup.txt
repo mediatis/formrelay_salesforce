@@ -1,8 +1,8 @@
-plugin.tx_formrealy_salesforce {
+plugin.tx_formrelay_salesforce {
 
-	enabled = {$plugin.tx_formrealy_salesforce.enabled}
+	enabled = {$plugin.tx_formrelay_salesforce.enabled}
 
-	salesForceUrl = {$plugin.tx_formrealy_salesforce.salesForceUrl}
+	salesForceUrl = {$plugin.tx_formrelay_salesforce.salesForceUrl}
 
 	fields {
 		removeFieldNameParts =
@@ -22,10 +22,10 @@ plugin.tx_formrealy_salesforce {
 		}
 
 		defaults {
-			oid = {$plugin.tx_formrealy_salesforce.fields.defaults.oid}
-			submit = {$plugin.tx_formrealy_salesforce.fields.defaults.submit}
-			retURL = {$plugin.tx_formrealy_salesforce.fields.defaults.retURL}
-			lead_source = {$plugin.tx_formrealy_salesforce.fields.defaults.lead_source}
+			oid = {$plugin.tx_formrelay_salesforce.fields.defaults.oid}
+			submit = {$plugin.tx_formrelay_salesforce.fields.defaults.submit}
+			retURL = {$plugin.tx_formrelay_salesforce.fields.defaults.retURL}
+			lead_source = {$plugin.tx_formrelay_salesforce.fields.defaults.lead_source}
 		}
 
 		mapping {
@@ -47,7 +47,7 @@ plugin.tx_formrealy_salesforce {
 			lead_source = lead_source
 			#country = fields:country,country_code
 
-			#contact_preference = {$plugin.tx_formrealy_salesforce.fields.salesforceCustomFields.contact_preference}
+			#contact_preference = {$plugin.tx_formrelay_salesforce.fields.salesforceCustomFields.contact_preference}
 	 	}
 		mappingOther = concat:description
 		specialMapping {

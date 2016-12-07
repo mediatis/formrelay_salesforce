@@ -1,7 +1,7 @@
 <?php
 
 ########################################################################
-# Extension Manager/Repository config file for ext: "leica_sfsend"
+# Extension Manager/Repository config file for ext: "formrelay_salesforce"
 #
 # Auto generated 13-05-2009 13:55
 #
@@ -11,7 +11,7 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-    'title' => 'SalesForce plugin',
+    'title' => 'SalesForce Plugin',
     'description' => 'Send form data to SalesForce via web2lead API',
     'category' => 'be',
     'author' => '',
