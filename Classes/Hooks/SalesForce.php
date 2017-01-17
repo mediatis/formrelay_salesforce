@@ -44,7 +44,7 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
         return new \Mediatis\Formrelay\DataDispatcher\Curl($this->conf['salesForceUrl']);
     }
 
-    protected function getTsKey()
+    public function getTsKey()
     {
         return "tx_formrelay_salesforce";
     }
