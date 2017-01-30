@@ -4,7 +4,7 @@ plugin.tx_formrelay_salesforce{
 
     # SFDC Sandbox
 	# salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
-	salesForceUrl = https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
+	salesForceUrl = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 
 	fields {
 	 	defaults {
