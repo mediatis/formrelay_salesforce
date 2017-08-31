@@ -1,0 +1,29 @@
+{
+    "authors": [
+        {
+            "email": "voehringer@mediatis.de",
+            "homepage": "http://www.mediatis.de",
+            "name": "Michael Vöhringer",
+            "role": "Developer"
+        }
+    ],
+	"autoload": {
+        "classmap": [
+            "Classes/"
+        ],
+        "psr-4": {
+            "Mediatis\\FormrelaySalesforce\\": "Classes/"
+        }
+    },
+    "license": "GPL-2.0+",
+    "name": "mediatis/formrelay-salesforce",
+    "replace": {
+        "mediatis/formrelay_salesforce": "self.version",
+        "typo3-ter/formrelay-salesforce": "self.version"
+    },
+    "require": {
+         "mediatis/formrelay": ">= 0.1.0"
+    },
+    "type": "typo3-cms-extension",
+    "version": "0.1.0"
+}
