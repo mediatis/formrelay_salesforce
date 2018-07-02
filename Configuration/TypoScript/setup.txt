@@ -76,3 +76,21 @@ plugin.tx_formrelay_salesforce {
 	configurationOverwrite {
 	}
 }
+
+[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
+page {
+  footerData.1530544082 = TEXT
+  footerData.1530544082 {
+    value (
+        /*<![CDATA[*/
+        var formrelay_salesforce_campaign_number = "{field:tx_formrelaysalesforce_campaignnumber}";
+        /*]]>*/
+    )
+    insertData = 1
+    wrap = <script type="text/javascript">|</script>
+  }
+	includeJSFooter {
+		campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
+  }
+}
+[global]
