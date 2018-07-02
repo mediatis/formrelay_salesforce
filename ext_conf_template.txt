@@ -1,0 +1,2 @@
+# cat=basic; type=boolean; label=Enable Campaign Number Cookies
+enableCampaignNumber =

@@ -25,5 +25,5 @@
          "mediatis/formrelay": ">= 0.1.0"
     },
     "type": "typo3-cms-extension",
-    "version": "0.1.0"
+    "version": "0.1.1"
 }
