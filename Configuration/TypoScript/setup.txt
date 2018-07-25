@@ -77,7 +77,7 @@ plugin.tx_formrelay_salesforce {
 	}
 }
 
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
+[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}] && [page|tx_formrelaysalesforce_campaignnumber != ]
 page {
   footerData.1530544082 = TEXT
   footerData.1530544082 {
