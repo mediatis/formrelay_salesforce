@@ -77,20 +77,22 @@ plugin.tx_formrelay_salesforce {
 	}
 }
 
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}] && [page|tx_formrelaysalesforce_campaignnumber != ]
+[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
 page {
-  footerData.1530544082 = TEXT
-  footerData.1530544082 {
-    value (
-        /*<![CDATA[*/
-        var formrelay_salesforce_campaign_number = "{field:tx_formrelaysalesforce_campaignnumber}";
-        /*]]>*/
-    )
-    insertData = 1
-    wrap = <script type="text/javascript">|</script>
-  }
+	footerData.1530544082 = TEXT
+	footerData.1530544082 {
+		value.field = tx_formrelaysalesforce_campaignnumber
+		insertData = 1
+		wrap (
+			<script type="text/javascript">/*<![CDATA[*/
+			// via formrelay_salesforce
+			var formrelay_salesforce_campaign_number = "|";
+			/*]]>*/</script>
+		)
+		required = 1
+	}
 	includeJSFooter {
 		campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
-  }
+	}
 }
 [global]
