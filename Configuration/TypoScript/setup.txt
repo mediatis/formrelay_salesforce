@@ -86,7 +86,7 @@ page {
 		wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via formrelay_salesforce
-			var formrelay_salesforce_campaign_number = "|";
+			window.formrelay_salesforce_campaign_number = "|";
 			/*]]>*/</script>
 		)
 		required = 1

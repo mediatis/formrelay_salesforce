@@ -8,13 +8,13 @@ jQuery(document).ready(function() {
       });
     };
     
-    if (formrelay_salesforce_campaign_number !== undefined && formrelay_salesforce_campaign_number !== '') {
+    if (window.formrelay_salesforce_campaign_number !== undefined && window.formrelay_salesforce_campaign_number !== '') {
       var sfCookie = jQuery.cookie('sfCampaignNumber');
       if(sfCookie == null) {
-        sfCookie = formrelay_salesforce_campaign_number;
+        sfCookie = window.formrelay_salesforce_campaign_number;
       } else {
         var cookieValues = sfCookie.split(',');
-        cookieValues.push(formrelay_salesforce_campaign_number);
+        cookieValues.push(window.formrelay_salesforce_campaign_number);
         sfCookie = unique(cookieValues);
       }
       jQuery.cookie('sfCampaignNumber', sfCookie, { path: '/' });
