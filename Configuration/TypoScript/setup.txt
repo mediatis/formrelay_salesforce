@@ -79,6 +79,7 @@ plugin.tx_formrelay_salesforce {
 
 [globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
 page {
+	# PAGE campaign number
 	footerData.1530544082 = TEXT
 	footerData.1530544082 {
 		value.field = tx_formrelaysalesforce_campaignnumber
@@ -93,6 +94,19 @@ page {
 	}
 	includeJSFooter {
 		campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
+	}
+	# NEWS campaign number
+	footerData.1536314635 = TEXT
+	footerData.1536314635 {
+		data = GP:tx_news_pi1|news
+        insertData = 1
+		wrap (
+			<script type="text/javascript">/*<![CDATA[*/
+			// via news ...
+			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
+			/*]]>*/</script>
+		)
+		required = 1
 	}
 }
 [global]
