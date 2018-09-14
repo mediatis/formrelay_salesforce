@@ -7,7 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_formrelaysalesforce_campaignnumber">Campaign Number</label>
-            <label index="tx_formrelaysalesforce_campaignnumber_hint">Please make sure the campaign's Type is set to "Internet Activity" and the Subtype is set to "Global Website".</label>
+			<label index="tx_formrelaysalesforce_campaignnumber_hint">Please make sure the campaign's Type is set to "Internet Activity" and the Subtype is set to "Global Website".</label>
 			<label index="tx_formrelaysalesforce_palette">Salesforce</label>
 		</languageKey>
 	</data>

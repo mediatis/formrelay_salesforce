@@ -26,6 +26,9 @@ plugin.tx_formrelay_salesforce {
 			submit = {$plugin.tx_formrelay_salesforce.fields.defaults.submit}
 			retURL = {$plugin.tx_formrelay_salesforce.fields.defaults.retURL}
 			lead_source = {$plugin.tx_formrelay_salesforce.fields.defaults.lead_source}
+			encoding = {$plugin.tx_formrelay_salesforce.fields.defaults.encoding}
+			debug = {$plugin.tx_formrelay_salesforce.fields.defaults.debug}
+			debugEmail = {$plugin.tx_formrelay_salesforce.fields.defaults.debugEmail}
 		}
 
 		mapping {
@@ -101,17 +104,17 @@ page {
 # NEWS campaign number
 [globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}] && [userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')]
 page {
-    footerData.1536314635 = TEXT
-    footerData.1536314635 {
-	    data = GP:tx_news_pi1|news
-        insertData = 1
-        wrap (
-		    <script type="text/javascript">/*<![CDATA[*/
-            // via news ...
-            var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
-            /*]]>*/</script>
-        )
-        required = 1
-    }
+	footerData.1536314635 = TEXT
+	footerData.1536314635 {
+		data = GP:tx_news_pi1|news
+		insertData = 1
+		wrap (
+			<script type="text/javascript">/*<![CDATA[*/
+			// via news ...
+			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
+			/*]]>*/</script>
+		)
+		required = 1
+	}
 }
 [global]

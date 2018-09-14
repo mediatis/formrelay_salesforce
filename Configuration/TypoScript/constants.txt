@@ -1,13 +1,13 @@
 plugin.tx_formrelay_salesforce{
 	# cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable: Only convert to XML if not set to 0.
-    enabled = 1
+	enabled = 1
 
-    # SFDC Sandbox
+	# SFDC Sandbox
 	# salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 	salesForceUrl = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 
 	fields {
-	 	defaults {
+		defaults {
 			oid =
 			submit = Submit+Query
 			retURL = #
@@ -19,7 +19,7 @@ plugin.tx_formrelay_salesforce{
 			# debugEmail = your@mail.com
 		}
 	}
-  
+
 	javascript {
 		campaignNumberCookieScript = EXT:formrelay_salesforce/Resources/Public/Javascript/campaigncookie.js
 	}
