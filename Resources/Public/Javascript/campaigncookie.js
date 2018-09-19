@@ -17,7 +17,11 @@ jQuery(document).ready(function() {
         cookieValues.push(window.formrelay_salesforce_campaign_number);
         sfCookie = unique(cookieValues);
       }
-      jQuery.cookie('sfCampaignNumber', sfCookie, { path: '/' });
+      var params = { path: '/' };
+      if (window.formrelay_salesforce_campaign_number_cookie_expires != '') {
+        params.expires = window.formrelay_salesforce_campaign_number_cookie_expires;
+      }
+      jQuery.cookie('sfCampaignNumber', sfCookie, params);
     }
   }
 });

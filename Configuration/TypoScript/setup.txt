@@ -90,6 +90,7 @@ page {
 		wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via formrelay_salesforce
+			window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires}
 			window.formrelay_salesforce_campaign_number = "|";
 			/*]]>*/</script>
 		)
@@ -111,6 +112,7 @@ page {
 		wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via news ...
+			window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires}
 			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
 			/*]]>*/</script>
 		)

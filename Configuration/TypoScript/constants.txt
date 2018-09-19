@@ -1,7 +1,10 @@
 plugin.tx_formrelay_salesforce{
 	# cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable: Only convert to XML if not set to 0.
 	enabled = 1
-
+	
+	# cat=plugin.tx_formrelay_salesforce//10; type=int+; label= Cookie Lifetime in days. Lifetime is limited to session if not set
+	campaignNumber.cookieExpires =
+	
 	# SFDC Sandbox
 	# salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 	salesForceUrl = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
