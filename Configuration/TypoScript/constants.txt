@@ -2,8 +2,11 @@ plugin.tx_formrelay_salesforce{
 	# cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable: Only convert to XML if not set to 0.
 	enabled = 1
 
-	# cat=plugin.tx_formrelay_salesforce//10; type=int+; label= Cookie Lifetime in days. Lifetime is limited to session if not set
+	# cat=plugin.tx_formrelay_salesforce//10; type=int+; label= Cookie Lifetime: Campaign number cookie fifetime in days. Lifetime is limited to session if not set
 	campaignNumber.cookieExpires =
+	
+	# cat=plugin.tx_formrelay_salesforce//20; type=boolean; label= Delete after sending: Delete campaign number cookie after contact form has been sent
+	campaignNumber.deleteCookieAfterSending = 0
 
 	# SFDC Sandbox
 	# salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8

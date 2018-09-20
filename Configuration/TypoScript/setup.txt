@@ -3,6 +3,8 @@ plugin.tx_formrelay_salesforce {
 	enabled = {$plugin.tx_formrelay_salesforce.enabled}
 
 	salesForceUrl = {$plugin.tx_formrelay_salesforce.salesForceUrl}
+    
+    campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.campaignNumber.deleteCookieAfterSending}
 
 	fields {
 		removeFieldNameParts =
@@ -84,6 +86,12 @@ plugin.tx_formrelay_salesforce {
 # PAGE campaign number
 [globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
 page {
+	footerData.1530544080 = TEXT
+	footerData.1530544080 {
+		value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires};</script>
+		insertData = 1
+		required = 1
+	}
 	footerData.1530544082 = TEXT
 	footerData.1530544082 {
 		value.field = tx_formrelaysalesforce_campaignnumber
@@ -91,7 +99,6 @@ page {
 		wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via formrelay_salesforce
-			window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires}
 			window.formrelay_salesforce_campaign_number = "|";
 			/*]]>*/</script>
 		)
@@ -113,7 +120,6 @@ page {
 		wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via news ...
-			window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires}
 			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
 			/*]]>*/</script>
 		)
