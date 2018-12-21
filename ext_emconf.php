@@ -10,7 +10,7 @@
 # "version" and "dependencies" must not be touched!
 ########################################################################
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'SalesForce Plugin',
     'description' => 'Send form data to SalesForce via web2lead API',
     'category' => 'be',
@@ -28,16 +28,17 @@ $EM_CONF[$_EXTKEY] = array(
     'clearCacheOnLoad' => 0,
     'lockType' => '',
     'author_company' => '',
-    'version' => '0.1.9',
-    'constraints' => array(
-        'depends' => array(
+    'version' => '1.0.1',
+    'constraints' => [
+        'depends' => [
+            "typo3" => "8.7.0-9.5.99",
             'formrelay' => '0.1.0',
-        ),
-        'conflicts' => array(
-        ),
-        'suggests' => array(
-        ),
-    ),
-    'suggests' => array(
-    ),
-);
+        ],
+        'conflicts' => [
+        ],
+        'suggests' => [
+        ],
+    ],
+    'suggests' => [
+    ],
+];
