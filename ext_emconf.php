@@ -17,7 +17,6 @@ $EM_CONF[$_EXTKEY] = array(
     'author' => '',
     'author_email' => '',
     'shy' => '',
-    'dependencies' => 'cms',
     'conflicts' => '',
     'priority' => '',
     'module' => '',
@@ -32,7 +31,6 @@ $EM_CONF[$_EXTKEY] = array(
     'version' => '0.1.9',
     'constraints' => array(
         'depends' => array(
-            'cms' => '',
             'formrelay' => '0.1.0',
         ),
         'conflicts' => array(
