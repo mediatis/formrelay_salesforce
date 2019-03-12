@@ -1,129 +1,134 @@
 plugin.tx_formrelay_salesforce {
 
-	enabled = {$plugin.tx_formrelay_salesforce.enabled}
+  enabled = {$plugin.tx_formrelay_salesforce.enabled}
 
-	salesForceUrl = {$plugin.tx_formrelay_salesforce.salesForceUrl}
-    
-    campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.campaignNumber.deleteCookieAfterSending}
+  salesForceUrl = {$plugin.tx_formrelay_salesforce.salesForceUrl}
 
-	fields {
-		removeFieldNameParts =
+  campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.campaignNumber.deleteCookieAfterSending}
 
-		validation {
-			required = email
+  fields {
+    removeFieldNameParts =
 
-			validWithNoFilters = 1
-			# filters {
-			# 	1 {
-			# 		whitelist {
-			# 			country = us,ca
-			# 			inquiry_type = quote_request,product_information
-			# 		}
-			# 	}
-			# }
-		}
+    validation {
+      required = email
 
-		defaults {
-			oid = {$plugin.tx_formrelay_salesforce.fields.defaults.oid}
-			submit = {$plugin.tx_formrelay_salesforce.fields.defaults.submit}
-			retURL = {$plugin.tx_formrelay_salesforce.fields.defaults.retURL}
-			lead_source = {$plugin.tx_formrelay_salesforce.fields.defaults.lead_source}
-			encoding = {$plugin.tx_formrelay_salesforce.fields.defaults.encoding}
-			debug = {$plugin.tx_formrelay_salesforce.fields.defaults.debug}
-			debugEmail = {$plugin.tx_formrelay_salesforce.fields.defaults.debugEmail}
-		}
+      validWithNoFilters = 1
+      # filters {
+      #  1 {
+      #    whitelist {
+      #      country = us,ca
+      #      inquiry_type = quote_request,product_information
+      #    }
+      #  }
+      # }
+    }
 
-		mapping {
-			# form-field  -> sdfc-field
-			first_name = split:first_name,last_name
-			last_name = last_name
-			company = company
-			department = department
-			email = email
-			phone = phone
-			zip = zip
-			country = country_code
-			city = city
-			street_address1 = append:street
-			street_address2 = append:street
-			street = street
-			fax = fax
-			title = title
-			language = language
-			lead_source = lead_source
-	 	}
-		mappingOther = concat:description
-		specialMapping {
-			last_name {
-				valuesNot =
-				mapping {
-					first_name = first_name
-				}
-			}
-		}
+    defaults {
+      oid = {$plugin.tx_formrelay_salesforce.fields.defaults.oid}
+      submit = {$plugin.tx_formrelay_salesforce.fields.defaults.submit}
+      retURL = {$plugin.tx_formrelay_salesforce.fields.defaults.retURL}
+      lead_source = {$plugin.tx_formrelay_salesforce.fields.defaults.lead_source}
+      encoding = {$plugin.tx_formrelay_salesforce.fields.defaults.encoding}
+      debug = {$plugin.tx_formrelay_salesforce.fields.defaults.debug}
+      debugEmail = {$plugin.tx_formrelay_salesforce.fields.defaults.debugEmail}
+    }
 
-		ignore.value = html_enabled,subject,recipient,recipient_copy,submit,password,password_again,randomID
+    mapping {
+      # form-field  -> sdfc-field
+      first_name = split:first_name,last_name
+      last_name = last_name
+      company = company
+      department = department
+      email = email
+      phone = phone
+      zip = zip
+      country = country_code
+      city = city
+      street_address1 = append:street
+      street_address2 = append:street
+      street = street
+      fax = fax
+      title = title
+      language = language
+      lead_source = lead_source
+    }
 
-		values {
-			ignoreIfEmpty = 1
-			mapping {
-				inquiry_type {
-					quote_request = Request a Quote
-					product_information = Request Product Information
-				}
-				contact_preference {
-					email = Email
-					phone = Phone
-				}
-			}
-		}
-	}
+    mappingOther = concat:description
+    specialMapping {
+      last_name {
+        valuesNot =
+        mapping {
+          first_name = first_name
+        }
+      }
+    }
 
-	configurationOverwrite {
-	}
+    ignore.value = html_enabled,subject,recipient,recipient_copy,submit,password,password_again,randomID
+
+    values {
+      ignoreIfEmpty = 1
+      mapping {
+        inquiry_type {
+          quote_request = Request a Quote
+          product_information = Request Product Information
+        }
+
+        contact_preference {
+          email = Email
+          phone = Phone
+        }
+      }
+    }
+  }
+
+  configurationOverwrite {
+
+  }
 }
 
 # PAGE campaign number
 [globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
-page {
-	footerData.1530544080 = TEXT
-	footerData.1530544080 {
-		value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires};</script>
-		insertData = 1
-		required = 1
-	}
-	footerData.1530544082 = TEXT
-	footerData.1530544082 {
-		value.field = tx_formrelaysalesforce_campaignnumber
-		insertData = 1
-		wrap (
+  page {
+    footerData.1530544080 = TEXT
+    footerData.1530544080 {
+      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires};</script>
+      insertData = 1
+      required = 1
+    }
+
+    footerData.1530544082 = TEXT
+    footerData.1530544082 {
+      value.field = tx_formrelaysalesforce_campaignnumber
+      insertData = 1
+      wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via formrelay_salesforce
 			window.formrelay_salesforce_campaign_number = "|";
 			/*]]>*/</script>
-		)
-		required = 1
-	}
-	includeJSFooter {
-		campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
-	}
-}
+      )
+      required = 1
+    }
+
+    includeJSFooter {
+      campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
+    }
+  }
 [global]
 
 # NEWS campaign number
 [globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}] && [userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')]
-page {
-	footerData.1536314635 = TEXT
-	footerData.1536314635 {
-		data = GP:tx_news_pi1|news
-		insertData = 1
-		wrap (
+  page {
+    footerData.1536314635 = TEXT
+    footerData.1536314635 {
+      data = GP:tx_news_pi1|news
+      insertData = 1
+      wrap (
 			<script type="text/javascript">/*<![CDATA[*/
 			// via news ...
 			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
 			/*]]>*/</script>
-		)
-		required = 1
-	}
-}
+      )
+      required = 1
+    }
+  }
 [global]
