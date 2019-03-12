@@ -22,8 +22,8 @@
     "typo3-ter/formrelay-salesforce": "self.version"
   },
   "require": {
-    "typo3/cms-core": "^8.7 || ^9.5",
-    "mediatis/formrelay": ">= 0.1.0"
+    "typo3/cms-core": "^7.6 | ^8.7 | ^9.5",
+    "mediatis/formrelay": ">=0.2.9"
   },
   "type": "typo3-cms-extension"
 }

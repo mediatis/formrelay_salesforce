@@ -34,6 +34,11 @@ namespace Mediatis\FormrelaySalesforce\Hooks;
  */
 class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \Mediatis\Formrelay\DataProcessorInterface
 {
+    public function getTsKey()
+    {
+        return "tx_formrelay_salesforce";
+    }
+
     protected function isEnabled()
     {
         return $this->conf['enabled'];
@@ -42,10 +47,5 @@ class SalesForce extends \Mediatis\Formrelay\AbstractFormrelayHook implements \M
     protected function getDispatcher()
     {
         return new \Mediatis\Formrelay\DataDispatcher\Curl($this->conf['salesForceUrl']);
-    }
-
-    public function getTsKey()
-    {
-        return "tx_formrelay_salesforce";
     }
 }
