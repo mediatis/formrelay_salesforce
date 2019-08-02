@@ -23,7 +23,7 @@
   },
   "require": {
     "typo3/cms-core": "^7.6 | ^8.7 | ^9.5",
-    "mediatis/formrelay": ">=0.2.9"
+    "mediatis/formrelay": "^1.1"
   },
   "type": "typo3-cms-extension"
 }
