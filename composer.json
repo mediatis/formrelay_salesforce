@@ -1,29 +1,73 @@
 {
+  "name": "mediatis/formrelay-salesforce",
+  "type": "typo3-cms-extension",
+  "description": "Delivery system for SalesForce (Web-To-Lead-API) based on Mediatis Formrelay",
+  "license": "GPL-2.0+",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "form",
+    "formrelay",
+    "salesforce",
+    "formrelay_salesforce",
+    "sfdc"
+  ],
+  "homepage": "https://www.mediatis.de",
   "authors": [
     {
-      "email": "voehringer@mediatis.de",
-      "homepage": "http://www.mediatis.de",
       "name": "Michael Vöhringer",
+      "role": "Developer"
+    },
+    {
+      "name": "Meelis Karulin",
+      "role": "Developer"
+    },
+    {
+      "name": "Damian Ickler",
+      "role": "Developer"
+    },
+    {
+      "name": "Stephan Ude",
       "role": "Developer"
     }
   ],
+  "require": {
+    "php": "~7.0 || ~7.1  || ~7.2",
+    "typo3/cms-core": "^8.7 || ^9.5",
+    "mediatis/formrelay": "^2.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "nimut/testing-framework": "^4.1.5"
+  },
   "autoload": {
-    "classmap": [
-      "Classes/"
-    ],
     "psr-4": {
-      "Mediatis\\FormrelaySalesforce\\": "Classes/"
+      "Mediatis\\FormrelaySalesforce\\": "Classes"
     }
   },
-  "license": "GPL-2.0+",
-  "name": "mediatis/formrelay-salesforce",
+  "autoload-dev": {
+    "psr-4": {
+      "Mediatis\\FormrelaySalesforce\\Tests\\": "Tests"
+    }
+  },
   "replace": {
     "mediatis/formrelay_salesforce": "self.version",
     "typo3-ter/formrelay-salesforce": "self.version"
   },
-  "require": {
-    "typo3/cms-core": "^7.6 | ^8.7 | ^9.5",
-    "mediatis/formrelay": "^1.1"
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
   },
-  "type": "typo3-cms-extension"
+  "scripts": {
+    "link-extension": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/formrelay_salesforce ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/formrelay_salesforce"
+    ]
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
 }
