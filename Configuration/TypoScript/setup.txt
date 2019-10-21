@@ -1,97 +1,64 @@
+# plugin.tx_formrelay.settings.ext.mapping {
+#   sf_campaign_number.ignore = 1
+# }
+
 plugin.tx_formrelay_salesforce {
+  settings {
 
-  enabled = {$plugin.tx_formrelay_salesforce.enabled}
+    enabled = {$plugin.tx_formrelay_salesforce.settings.enabled}
 
-  salesForceUrl = {$plugin.tx_formrelay_salesforce.salesForceUrl}
+    salesForceUrl = {$plugin.tx_formrelay_salesforce.settings.salesForceUrl}
 
-  campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.campaignNumber.deleteCookieAfterSending}
+    campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.deleteCookieAfterSending}
 
-  fields {
-    removeFieldNameParts =
-
-    validation {
+    gate {
       required = email
-
-      validWithNoFilters = 1
-      # filters {
-      #  1 {
-      #    whitelist {
-      #      country = us,ca
-      #      inquiry_type = quote_request,product_information
-      #    }
-      #  }
-      # }
     }
 
     defaults {
-      oid = {$plugin.tx_formrelay_salesforce.fields.defaults.oid}
-      submit = {$plugin.tx_formrelay_salesforce.fields.defaults.submit}
-      retURL = {$plugin.tx_formrelay_salesforce.fields.defaults.retURL}
-      lead_source = {$plugin.tx_formrelay_salesforce.fields.defaults.lead_source}
-      encoding = {$plugin.tx_formrelay_salesforce.fields.defaults.encoding}
-      debug = {$plugin.tx_formrelay_salesforce.fields.defaults.debug}
-      debugEmail = {$plugin.tx_formrelay_salesforce.fields.defaults.debugEmail}
+      oid = {$plugin.tx_formrelay_salesforce.settings.defaults.oid}
+      submit = {$plugin.tx_formrelay_salesforce.settings.defaults.submit}
+      retURL = {$plugin.tx_formrelay_salesforce.settings.defaults.retURL}
+      lead_source = {$plugin.tx_formrelay_salesforce.settings.defaults.lead_source}
+      encoding = {$plugin.tx_formrelay_salesforce.settings.defaults.encoding}
+      debug = {$plugin.tx_formrelay_salesforce.settings.defaults.debug}
+      debugEmail = {$plugin.tx_formrelay_salesforce.settings.defaults.debugEmail}
     }
 
-    mapping {
-      # form-field  -> sdfc-field
-      first_name = split:first_name,last_name
-      last_name = last_name
-      company = company
-      department = department
-      email = email
-      phone = phone
-      zip = zip
-      country = country_code
-      city = city
-      street_address1 = append:street
-      street_address2 = append:street
-      street = street
-      fax = fax
-      title = title
-      language = language
-      lead_source = lead_source
-    }
-
-    mappingOther = concat:description
-    specialMapping {
-      last_name {
-        valuesNot =
-        mapping {
-          first_name = first_name
-        }
+    fields {
+      mapping {
+        # form-field  -> sdfc-field
+        first_name = first_name
+        last_name = last_name
+        company = company
+        department = department
+        email = email
+        phone = phone
+        zip = zip
+        country = country_code
+        city = city
+        street = street
+        fax = fax
+        title = title
+        language = language
+        lead_source = lead_source
       }
+
+      unmapped = description
+      unmapped.appendKeyValue = 1
     }
-
-    ignore.value = html_enabled,subject,recipient,recipient_copy,submit,password,password_again,randomID
-
     values {
       ignoreIfEmpty = 1
-      mapping {
-        inquiry_type {
-          quote_request = Request a Quote
-          product_information = Request Product Information
-        }
-
-        contact_preference {
-          email = Email
-          phone = Phone
-        }
-      }
     }
-  }
-
-  configurationOverwrite {
-
   }
 }
 
 # PAGE campaign number
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}]
+[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber}]
   page {
     footerData.1530544080 = TEXT
     footerData.1530544080 {
-      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.campaignNumber.cookieExpires};</script>
+      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.cookieExpires};</script>
       insertData = 1
       required = 1
     }
@@ -110,13 +77,13 @@ plugin.tx_formrelay_salesforce {
     }
 
     includeJSFooter {
-      campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.javascript.campaignNumberCookieScript}
+      campaignNumberCookieScript = {$plugin.tx_formrelay_salesforce.settings.javascript.campaignNumberCookieScript}
     }
   }
 [global]
 
 # NEWS campaign number
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.enableCampaignNumber}] && [userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')]
+[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber}] && [userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')]
   page {
     footerData.1536314635 = TEXT
     footerData.1536314635 {
