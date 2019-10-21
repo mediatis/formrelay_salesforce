@@ -1,69 +1,54 @@
+# plugin.tx_formrelay.settings.ext.mapping {
+#   sf_campaign_number.ignore = 1
+# }
+
 plugin.tx_formrelay_salesforce {
+  settings {
 
-  enabled = {$plugin.tx_formrelay_salesforce.settings.enabled}
+    enabled = {$plugin.tx_formrelay_salesforce.settings.enabled}
 
-  salesForceUrl = {$plugin.tx_formrelay_salesforce.settings.salesForceUrl}
+    salesForceUrl = {$plugin.tx_formrelay_salesforce.settings.salesForceUrl}
 
-  campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.deleteCookieAfterSending}
+    campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.deleteCookieAfterSending}
 
-  gate {
-    required = email
-  }
-
-  defaults {
-    oid = {$plugin.tx_formrelay_salesforce.settings.defaults.oid}
-    submit = {$plugin.tx_formrelay_salesforce.settings.defaults.submit}
-    retURL = {$plugin.tx_formrelay_salesforce.settings.defaults.retURL}
-    lead_source = {$plugin.tx_formrelay_salesforce.settings.defaults.lead_source}
-    encoding = {$plugin.tx_formrelay_salesforce.settings.defaults.encoding}
-    debug = {$plugin.tx_formrelay_salesforce.settings.defaults.debug}
-    debugEmail = {$plugin.tx_formrelay_salesforce.settings.defaults.debugEmail}
-  }
-
-  fields {
-    mapping {
-      # form-field  -> sdfc-field
-      first_name = first_name
-      first_name.if {
-        last_name.empty = 1
-        then.split.fields {
-          1 = first_name
-          2 = last_name
-        }
-      }
-      last_name = last_name
-      company = company
-      department = department
-      email = email
-      phone = phone
-      zip = zip
-      country = country_code
-      city = city
-      street_address1 = street
-      street_address1.appendValue = 1
-      street_address2 = street
-      street_address2.appendValue = 1
-      street = street
-      fax = fax
-      title = title
-      language = language
-      lead_source = lead_source
+    gate {
+      required = email
     }
 
-    unmapped = description
-    unmapped.appendKeyValue = 1
-  }
-  values {
-    ignoreIfEmpty = 1
-    mapping {
-      inquiry_type {
-        quote_request = Request a Quote
-        product_information = Request Product Information
+    defaults {
+      oid = {$plugin.tx_formrelay_salesforce.settings.defaults.oid}
+      submit = {$plugin.tx_formrelay_salesforce.settings.defaults.submit}
+      retURL = {$plugin.tx_formrelay_salesforce.settings.defaults.retURL}
+      lead_source = {$plugin.tx_formrelay_salesforce.settings.defaults.lead_source}
+      encoding = {$plugin.tx_formrelay_salesforce.settings.defaults.encoding}
+      debug = {$plugin.tx_formrelay_salesforce.settings.defaults.debug}
+      debugEmail = {$plugin.tx_formrelay_salesforce.settings.defaults.debugEmail}
+    }
+
+    fields {
+      mapping {
+        # form-field  -> sdfc-field
+        first_name = first_name
+        last_name = last_name
+        company = company
+        department = department
+        email = email
+        phone = phone
+        zip = zip
+        country = country_code
+        city = city
+        street = street
+        fax = fax
+        title = title
+        language = language
+        lead_source = lead_source
       }
-      contact_preference {
-        email = Email
-        phone = Phone
-      }
+
+      unmapped = description
+      unmapped.appendKeyValue = 1
+    }
+    values {
+      ignoreIfEmpty = 1
     }
   }
 }
