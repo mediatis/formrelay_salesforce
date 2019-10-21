@@ -3,9 +3,9 @@
 namespace Mediatis\FormrelaySalesforce\DataProvider;
 
 use Mediatis\Formrelay\Configuration\ConfigurationManager;
-use Mediatis\Formrelay\Utility\FormrelayUtility;
+use Mediatis\Formrelay\DataProvider\DataProviderInterface;
 
-class CampaignNumber implements \Mediatis\Formrelay\DataProviderInterface
+class CampaignNumber implements DataProviderInterface
 {
     /** @var ConfigurationManager */
     protected $configurationManager;
