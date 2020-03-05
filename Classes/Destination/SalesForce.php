@@ -5,7 +5,7 @@ namespace Mediatis\FormrelaySalesforce\Destination;
 use Mediatis\Formrelay\Destination\AbstractDestination;
 use Mediatis\Formrelay\DataDispatcher\RequestDispatcher;
 
-class SalesForce extends AbstractDestination
+class Salesforce extends AbstractDestination
 {
     public function getExtensionKey(): string
     {

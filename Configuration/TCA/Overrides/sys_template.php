@@ -6,5 +6,5 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'formrelay_salesforce',
     'Configuration/TypoScript',
-    'FormRelay SalesForce'
+    'FormRelay Salesforce'
 );
