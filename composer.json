@@ -1,7 +1,7 @@
 {
   "name": "mediatis/formrelay-salesforce",
   "type": "typo3-cms-extension",
-  "description": "Delivery system for SalesForce (Web-To-Lead-API) based on Mediatis Formrelay",
+  "description": "Delivery system for Salesforce (Web-To-Lead-API) based on Mediatis Formrelay",
   "license": "GPL-2.0+",
   "keywords": [
     "TYPO3",
