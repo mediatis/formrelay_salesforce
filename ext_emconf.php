@@ -1,7 +1,7 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Form Relay - SalesForce Plugin',
+    'title' => 'Form Relay - Salesforce Plugin',
     'description' => 'Send form data to SFDC via Web-To-Lead API',
     'category' => 'be',
     'author' => '',
@@ -12,7 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => 0,
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '2.0.0',
+    'version' => '2.0.1',
     'constraints' => [
         'depends' => [
             'typo3' => '8.5.0-9.5.99',
