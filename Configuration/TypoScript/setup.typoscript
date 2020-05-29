@@ -54,7 +54,7 @@ plugin.tx_formrelay_salesforce {
 }
 
 # PAGE campaign number
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber}]
+[{$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber} == 1]
   page {
     footerData.1530544080 = TEXT
     footerData.1530544080 {
@@ -83,7 +83,7 @@ plugin.tx_formrelay_salesforce {
 [global]
 
 # NEWS campaign number
-[globalVar = LIT:1 = {$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber}] && [userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')]
+[{$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber} == 1 && formrelay.extensionLoaded('news')]
   page {
     footerData.1536314635 = TEXT
     footerData.1536314635 {
