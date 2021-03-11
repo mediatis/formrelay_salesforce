@@ -7,58 +7,60 @@ plugin.tx_formrelay_salesforce {
 
     enabled = {$plugin.tx_formrelay_salesforce.settings.enabled}
 
-    salesForceUrl = {$plugin.tx_formrelay_salesforce.settings.salesForceUrl}
-
-    campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.deleteCookieAfterSending}
+    url = {$plugin.tx_formrelay_salesforce.settings.url}
 
     gate {
       required = email
     }
 
-    defaults {
-      oid = {$plugin.tx_formrelay_salesforce.settings.defaults.oid}
-      submit = {$plugin.tx_formrelay_salesforce.settings.defaults.submit}
-      retURL = {$plugin.tx_formrelay_salesforce.settings.defaults.retURL}
-      lead_source = {$plugin.tx_formrelay_salesforce.settings.defaults.lead_source}
-      encoding = {$plugin.tx_formrelay_salesforce.settings.defaults.encoding}
-      debug = {$plugin.tx_formrelay_salesforce.settings.defaults.debug}
-      debugEmail = {$plugin.tx_formrelay_salesforce.settings.defaults.debugEmail}
-    }
+    ignoreEmptyFields = {$plugin.tx_formrelay_salesforce.settings.ignoreEmptyFields}
+    passthroughFields = {$plugin.tx_formrelay_salesforce.settings.passthroughFields}
 
     fields {
-      mapping {
-        # form-field  -> sdfc-field
-        first_name = first_name
-        last_name = last_name
-        company = company
-        department = department
-        email = email
-        phone = phone
-        zip = zip
-        country = country_code
-        city = city
-        street = street
-        fax = fax
-        title = title
-        language = language
-        lead_source = lead_source
-      }
+      oid = {$plugin.tx_formrelay_salesforce.settings.fields.oid}
+      submit = {$plugin.tx_formrelay_salesforce.settings.fields.submit}
+      retURL = {$plugin.tx_formrelay_salesforce.settings.fields.retURL}
+      lead_source = {$plugin.tx_formrelay_salesforce.settings.fields.lead_source}
+      encoding = {$plugin.tx_formrelay_salesforce.settings.fields.encoding}
+      debug = {$plugin.tx_formrelay_salesforce.settings.fields.debug}
+      debugEmail = {$plugin.tx_formrelay_salesforce.settings.fields.debugEmail}
+      first_name.field = first_name
+      last_name.field = last_name
+      company.field = company
+      department.field = department
+      email.field = email
+      phone.field = phone
+      zip.field = zip
+      country.field = country_code
+      city.field = city
+      street.field = street
+      fax.field = fax
+      title.field = title
+      language.field = language
+      lead_source.field = lead_source
 
-      unmapped = description
-      unmapped.appendKeyValue = 1
-    }
-    values {
-      ignoreIfEmpty = 1
+      description.fieldCollector {
+        ignoreIfEmpty = 1
+        unprocessedOnly = 1
+      }
     }
   }
 }
 
+plugin.tx_formrelay.settings.dataProviders {
+  sfdcCampaignNumber {
+    enabled = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled}
+    cookieExpires = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.cookieExpires}
+    deleteCookieAfterSending = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.deleteCookieAfterSending}
+  }
+}
+
 # PAGE campaign number
-[{$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber} == 1]
+[{$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled} == 1]
   page {
     footerData.1530544080 = TEXT
     footerData.1530544080 {
-      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.cookieExpires};</script>
+      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.cookieExpires};</script>
       insertData = 1
       required = 1
     }
@@ -83,7 +85,7 @@ plugin.tx_formrelay_salesforce {
 [global]
 
 # NEWS campaign number
-[{$plugin.tx_formrelay_salesforce.settings.enableCampaignNumber} == 1 && formrelay.extensionLoaded('news')]
+[{$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled} == 1 && formrelay.extensionLoaded('news')]
   page {
     footerData.1536314635 = TEXT
     footerData.1536314635 {
