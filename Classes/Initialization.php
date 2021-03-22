@@ -12,8 +12,6 @@ class Initialization
     public function initialize(RegistryInterface $registry)
     {
         SalesforceInitialization::initialize($registry);
-        $registry->deleteRoute(RequestRoute::class);
-
         $registry->registerDataProvider(SfdcCampaignNumberDataProvider::class);
     }
 }
