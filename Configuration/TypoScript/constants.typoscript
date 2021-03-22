@@ -6,6 +6,9 @@ plugin.tx_formrelay_salesforce {
     # url = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
     url = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 
+    ignoreEmptyFields = 1
+    passthroughFields = 0
+
     fields {
       oid =
       submit = Submit+Query

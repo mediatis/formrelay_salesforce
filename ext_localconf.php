@@ -4,16 +4,11 @@ if (!defined('TYPO3_MODE')) {
 }
 
 (function() {
-    /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $dispatcher */
-    $dispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-
     // relay initalization
-    $dispatcher->connect(
-        \FormRelay\Core\Service\RegistryInterface::class,
-        \Mediatis\Formrelay\Factory\RegistryFactory::SIGNAL_UPDATE_REGISTRY,
-        \Mediatis\FormrelayPardot\Initialization::class,
-        'initialize'
-    );
+    \Mediatis\Formrelay\Utility\RegistrationUtility::registerInitialization(\Mediatis\FormrelaySalesforce\Initialization::class);
+
+    // configuration updater
+    \Mediatis\Formrelay\Utility\RegistrationUtility::registerRouteConfigurationUpdater(\Mediatis\FormrelaySalesforce\Configuration\ConfigurationUpdater::class);
 
     // setup enabled flag for data provider sfdcCampaignNumber
     $enableCampaignNumber = '0';
@@ -25,13 +20,5 @@ if (!defined('TYPO3_MODE')) {
     // Make Extension Manager variable available in Typoscript:
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants(
         'plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled = ' . $enableCampaignNumber
-    );
-
-    // configuration updater
-    $dispatcher->connect(
-        \Mediatis\Formrelay\Configuration\RouteConfigurationUpdaterInterface::class,
-        \Mediatis\Formrelay\Configuration\RouteConfigurationUpdaterInterface::SIGNAL_UPDATE_ROUTE_CONFIGURATION,
-        \Mediatis\FormrelaySalesforce\Configuration\ConfigurationUpdater::class,
-        'updateRouteConfiguration'
     );
 })();
