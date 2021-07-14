@@ -4,6 +4,7 @@ namespace Mediatis\FormrelaySalesforce\DataProvider;
 
 use FormRelay\Core\DataProvider\DataProvider;
 use FormRelay\Core\Model\Submission\SubmissionInterface;
+use FormRelay\Core\Request\RequestInterface;
 
 class SfdcCampaignNumberDataProvider extends DataProvider
 {
@@ -16,10 +17,10 @@ class SfdcCampaignNumberDataProvider extends DataProvider
     const KEY_DELETE_COOKIE_AFTER_SENDING = 'deleteCookieAfterSending';
     const DEFAULT_DELETE_COOKIE_AFTER_SENDING = false;
 
-    protected function processContext(SubmissionInterface $submission)
+    protected function processContext(SubmissionInterface $submission, RequestInterface $request)
     {
         $cookieName = $this->getConfig(static::KEY_COOKIE_NAME);
-        $exists = $this->addCookieToContext($submission, $cookieName);
+        $exists = $this->addCookieToContext($submission, $request, $cookieName);
         if ($exists && $this->getConfig(static::KEY_DELETE_COOKIE_AFTER_SENDING)) {
             setcookie($cookieName, '', time() - 3600, '/');
         }
