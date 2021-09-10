@@ -18,10 +18,12 @@ class CampaignNumber implements DataProviderInterface
     public function addData(array &$dataArray)
     {
         if ($_COOKIE['sfCampaignNumber'] != "") {
-            $dataArray['sf_campaign_number'] = $_COOKIE['sfCampaignNumber'];
             $settings = $this->configurationManager->getExtensionSettings('tx_formrelay_salesforce');
-            if ($settings['campaignNumber.']['deleteCookieAfterSending'] == 1) {
-                setcookie('sfCampaignNumber', '', time() - 3600, '/');
+            if ($settings['campaignNumber.']['enabled'] == 1) {
+                $dataArray['sf_campaign_number'] = $_COOKIE['sfCampaignNumber'];
+                if ($settings['campaignNumber.']['deleteCookieAfterSending'] == 1) {
+                    setcookie('sfCampaignNumber', '', time() - 3600, '/');
+                }
             }
         }
     }
