@@ -9,6 +9,8 @@ plugin.tx_formrelay_salesforce {
 
     salesForceUrl = {$plugin.tx_formrelay_salesforce.settings.salesForceUrl}
 
+    campaignNumber.enabled = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.enabled}
+
     campaignNumber.deleteCookieAfterSending = {$plugin.tx_formrelay_salesforce.settings.campaignNumber.deleteCookieAfterSending}
 
     gate {
