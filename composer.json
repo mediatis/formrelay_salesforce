@@ -33,8 +33,8 @@
   ],
   "require": {
     "typo3/cms-core": "^9.5 || ^10.4",
-    "typo3-ter/formrelay": "dev-feature/LMSCB-16_async_submission",
-    "form-relay/salesforce": "dev-feature/LMSCB-16_async_submission"
+    "mediatis/formrelay": "^5.0",
+    "form-relay/salesforce": "^2.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.0",
