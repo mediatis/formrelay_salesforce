@@ -1,22 +1,15 @@
 plugin.tx_formrelay_salesforce {
   settings {
-    # cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable: Only convert to XML if not set to 0.
     enabled = 0
 
-    # cat=plugin.tx_formrelay_salesforce//1; type=int+; label= Enable campaign number from cookies
-    campaignNumber.enabled = 1
-
-    # cat=plugin.tx_formrelay_salesforce//10; type=int+; label= Cookie Lifetime: Campaign number cookie fifetime in days. Lifetime is limited to session if not set
-    campaignNumber.cookieExpires =
-
-    # cat=plugin.tx_formrelay_salesforce//20; type=boolean; label= Delete after sending: Delete campaign number cookie after contact form has been sent
-    campaignNumber.deleteCookieAfterSending = 0
-
     # SFDC Sandbox
-    # salesForceUrl = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
-    salesForceUrl = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
+    # url = https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
+    url = https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8
 
-    defaults {
+    ignoreEmptyFields = 1
+    passthroughFields = 0
+
+    fields {
       oid =
       submit = Submit+Query
       retURL = #
@@ -33,5 +26,13 @@ plugin.tx_formrelay_salesforce {
     javascript {
       campaignNumberCookieScript = EXT:formrelay_salesforce/Resources/Public/Javascript/campaigncookie.js
     }
+  }
+}
+
+plugin.tx_formrelay.settings.dataProviders {
+  sfdcCampaignNumber {
+    # enabled = 0 # is set via extension configuration
+    cookieExpires =
+    deleteCookieAfterSending = 0
   }
 }
