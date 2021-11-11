@@ -1,0 +1,34 @@
+
+4.0.0
+
+[FEATURE] Asynchronous Submissions
+
+3.0.3
+
+[FEATURE] Add parameter to disable campaignCode dataprovider
+
+3.0.2
+
+[BUGFIX] fixed data provider
+
+3.0.1
+
+[BUGFIX] Fix access to extension config and set the correct constant
+
+3.0.0
+
+[TASK] Code Updates for TYPO3 v9 and v10
+
+2.0.1
+
+[BUGFIX] Replace capital F in SalesForce with small  f as in Salesforce
+
+2.0.0
+
+[TASK] code updates for mediatis/formrelay 2.0
+
+[BUGFIX] fixed campaign code data provider
+
+1.0.0
+
+[TASK] code base
