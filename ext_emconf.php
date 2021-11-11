@@ -8,10 +8,6 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => '',
     'author_company' => 'Mediatis AG',
     'state' => 'alpha',
-    'internal' => '',
-    'uploadfolder' => 0,
-    'createDirs' => '',
-    'clearCacheOnLoad' => 0,
     'version' => '4.0.0',
     'constraints' => [
         'depends' => [
@@ -23,7 +19,5 @@ $EM_CONF[$_EXTKEY] = [
         'suggests' => [
             'news' => '*'
         ],
-    ],
-    'suggests' => [
     ],
 ];
