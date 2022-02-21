@@ -1,3 +1,8 @@
+5.0.0
+
+[TASK] Update for TYPO3 11
+
+[TASK] Drop TYPO3 9 support
 
 4.0.0
 
