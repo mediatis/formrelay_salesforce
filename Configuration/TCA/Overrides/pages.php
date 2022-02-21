@@ -1,10 +1,10 @@
 <?php
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die ('Access denied.');
 }
 
 //** Global Extension Settings
-$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['formrelay_salesforce']);
+$conf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('formrelay_salesforce');
 
 if (isset($conf['enableCampaignNumber']) && $conf['enableCampaignNumber'] == 1) {
     $fields = [
