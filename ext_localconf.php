@@ -1,9 +1,8 @@
 <?php
-if (!defined('TYPO3')) {
-    die ('Access denied.');
-}
 
-(function() {
+defined('TYPO3') or die();
+
+(function () {
     // relay initalization
     \Mediatis\Formrelay\Utility\RegistrationUtility::registerInitialization(\Mediatis\FormrelaySalesforce\Initialization::class);
 
@@ -14,7 +13,7 @@ if (!defined('TYPO3')) {
     $enableCampaignNumber = '0';
     $conf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)
         ->get('formrelay_salesforce');
-    if (isset($conf['enableCampaignNumber']) && $conf['enableCampaignNumber'] === '1') {
+    if ($conf['enableCampaignNumber'] ?? false) {
         $enableCampaignNumber = '1';
     }
     // Make Extension Manager variable available in Typoscript:

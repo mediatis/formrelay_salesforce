@@ -1,7 +1,6 @@
 <?php
-if (!defined('TYPO3')) {
-    die('Access denied.');
-}
+
+defined('TYPO3') or die();
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
     'pages',
