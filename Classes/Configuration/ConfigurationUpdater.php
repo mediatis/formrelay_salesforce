@@ -6,7 +6,10 @@ use Mediatis\Formrelay\Configuration\RouteConfigurationUpdaterInterface;
 
 class ConfigurationUpdater implements RouteConfigurationUpdaterInterface
 {
-    protected function updateUrlConfiguration(array &$routeConfiguration)
+    /**
+     * @param array<mixed> $routeConfiguration
+     */
+    protected function updateUrlConfiguration(array &$routeConfiguration): void
     {
         if (array_key_exists('salesForceUrl', $routeConfiguration)) {
             if (!array_key_exists('url', $routeConfiguration)) {
@@ -16,7 +19,10 @@ class ConfigurationUpdater implements RouteConfigurationUpdaterInterface
         }
     }
 
-    public function updateRouteConfiguration(string $routeName, array &$routeConfiguration)
+    /**
+     * @param array<mixed> $routeConfiguration
+     */
+    public function updateRouteConfiguration(string $routeName, array &$routeConfiguration): void
     {
         if ($routeName === 'salesforce') {
             $this->updateUrlConfiguration($routeConfiguration);

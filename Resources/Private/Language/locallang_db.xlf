@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" product-name="lang">
+    <header/>
+    <body>
+      <trans-unit id="tx_formrelaysalesforce_palette">
+        <source>Salesforce</source>
+      </trans-unit>
+      <trans-unit id="tx_formrelaysalesforce_campaignnumber">
+        <source>Campaign Number</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

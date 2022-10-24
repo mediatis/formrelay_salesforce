@@ -17,7 +17,7 @@ class SfdcCampaignNumberDataProvider extends DataProvider
     const KEY_DELETE_COOKIE_AFTER_SENDING = 'deleteCookieAfterSending';
     const DEFAULT_DELETE_COOKIE_AFTER_SENDING = false;
 
-    protected function processContext(SubmissionInterface $submission, RequestInterface $request)
+    protected function processContext(SubmissionInterface $submission, RequestInterface $request): void
     {
         $cookieName = $this->getConfig(static::KEY_COOKIE_NAME);
         $exists = $this->addCookieToContext($submission, $request, $cookieName);
@@ -26,7 +26,7 @@ class SfdcCampaignNumberDataProvider extends DataProvider
         }
     }
 
-    protected function process(SubmissionInterface $submission)
+    protected function process(SubmissionInterface $submission): void
     {
         $cookieName = $this->getconfig(static::KEY_COOKIE_NAME);
         $campaignNumber = $this->getCookieFromContext($submission, $cookieName);
@@ -36,6 +36,9 @@ class SfdcCampaignNumberDataProvider extends DataProvider
         }
     }
 
+    /**
+     * @return array<mixed>
+     */
     public static function getDefaultConfiguration(): array
     {
         return parent::getDefaultConfiguration() + [

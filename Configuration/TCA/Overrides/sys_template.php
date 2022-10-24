@@ -1,7 +1,6 @@
 <?php
-if (!defined('TYPO3')) {
-    die('Access denied.');
-}
+
+defined('TYPO3') or die('Access denied.');
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'formrelay_salesforce',

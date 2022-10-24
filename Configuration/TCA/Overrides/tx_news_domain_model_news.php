@@ -1,7 +1,6 @@
 <?php
-if (!defined('TYPO3')) {
-    die ('Access denied.');
-}
+
+defined('TYPO3') or die();
 
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     //** Global Extension Settings
@@ -9,14 +8,14 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
 
     if (isset($conf['enableCampaignNumber']) && $conf['enableCampaignNumber'] == 1) {
         $fields = [
-            "tx_formrelaysalesforce_campaignnumber" => [
-                "exclude" => 1,
-                "l10n_mode" => "exclude",
-                "label" => "LLL:EXT:formrelay_salesforce/Resources/Private/Language/locallang_db.xml:tx_formrelaysalesforce_campaignnumber",
-                "config" => [
-                    'type' => 'input'
-                ]
-            ]
+            'tx_formrelaysalesforce_campaignnumber' => [
+                'exclude' => 1,
+                'l10n_mode' => 'exclude',
+                'label' => 'LLL:EXT:formrelay_salesforce/Resources/Private/Language/locallang_db.xml:tx_formrelaysalesforce_campaignnumber',
+                'config' => [
+                    'type' => 'input',
+                ],
+            ],
         ];
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_news_domain_model_news', $fields);
@@ -28,7 +27,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
         );
 
         $GLOBALS['TCA']['tx_news_domain_model_news']['palettes']['tx_formrelaysalesforce_fields'] = [
-            'showitem' => 'tx_formrelaysalesforce_campaignnumber'
+            'showitem' => 'tx_formrelaysalesforce_campaignnumber',
         ];
     }
 }
