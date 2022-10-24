@@ -1,4 +1,6 @@
 
+5.0.1
+
 [TASK] Update Campaign Number Handling for TYPO3 11
 
 5.0.0
