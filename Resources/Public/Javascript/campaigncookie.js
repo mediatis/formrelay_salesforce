@@ -1,27 +1,36 @@
-jQuery(document).ready(function () {
-  // Set or update Cookie if current page has a campaign number
-  if (typeof jQuery.cookie == 'function') {
+(function(w, d) {
+  var COOKIE_NAME = 'sfCampaignNumber';
 
-    var unique = function (array) {
-      return $.grep(array, function (el, index) {
-        return index === $.inArray(el, array);
-      });
-    };
-
-    if (window.formrelay_salesforce_campaign_number !== undefined && window.formrelay_salesforce_campaign_number !== '') {
-      var sfCookie = jQuery.cookie('sfCampaignNumber');
-      if (sfCookie == null) {
-        sfCookie = window.formrelay_salesforce_campaign_number;
-      } else {
-        var cookieValues = sfCookie.split(',');
-        cookieValues.push(window.formrelay_salesforce_campaign_number);
-        sfCookie = unique(cookieValues);
-      }
-      var params = {path: '/'};
-      if (window.formrelay_salesforce_campaign_number_cookie_expires != '') {
-        params.expires = window.formrelay_salesforce_campaign_number_cookie_expires;
-      }
-      jQuery.cookie('sfCampaignNumber', sfCookie, params);
-    }
+  function getCookie(name) {
+    return d.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || null;
   }
-});
+
+  function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    d.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  function updateCampaignNumber(sfCampaignNumber, cookieExpires) {
+    var sfCookie = getCookie(COOKIE_NAME);
+    var cookieValues = sfCookie ? sfCookie.split(',') : [];
+      if (cookieValues.indexOf(sfCampaignNumber) === -1) {
+        cookieValues.push(sfCampaignNumber);
+        sfCookie = cookieValues.join(',');
+        setCookie(COOKIE_NAME, sfCookie, cookieExpires);
+      }
+  }
+
+  d.addEventListener('DOMContentLoaded', function() {
+    var formrelaySalesforce = w.formrelaySalesforce || {};
+    var campaignNumber = formrelaySalesforce.campaignNumber || '';
+    var cookieExpires = formrelaySalesforce.cookieExpires || '';
+    if (campaignNumber) {
+      updateCampaignNumber(campaignNumber, cookieExpires);
+    }
+  });
+})(window, document);

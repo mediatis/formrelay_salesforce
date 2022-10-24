@@ -1,7 +1,3 @@
-# plugin.tx_formrelay.settings.ext.mapping {
-#   sf_campaign_number.ignore = 1
-# }
-
 plugin.tx_formrelay_salesforce {
   settings {
 
@@ -58,24 +54,23 @@ plugin.tx_formrelay.settings.dataProviders {
 # PAGE campaign number
 [{$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled} == 1]
   page {
-    footerData.1530544080 = TEXT
+    footerData.1530544080 = COA
     footerData.1530544080 {
-      value = <script type="text/javascript">window.formrelay_salesforce_campaign_number_cookie_expires = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.cookieExpires};</script>
-      insertData = 1
-      required = 1
-    }
+      wrap = <script>window.formrelaySalesforce={|};</script>
+      10 = TEXT
+      10 {
+        wrap = cookieExpires:|,
+        value = {$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.cookieExpires}
+      }
 
-    footerData.1530544082 = TEXT
-    footerData.1530544082 {
-      value.field = tx_formrelaysalesforce_campaignnumber
-      insertData = 1
-      wrap (
-			<script type="text/javascript">/*<![CDATA[*/
-			// via formrelay_salesforce
-			window.formrelay_salesforce_campaign_number = "|";
-			/*]]>*/</script>
-      )
-      required = 1
+      20 = TEXT
+      20.value = /*pages*/
+
+      30 = TEXT
+      30 {
+        wrap = campaignNumber:"|"
+        value.field = tx_formrelaysalesforce_campaignnumber
+      }
     }
 
     includeJSFooter {
@@ -85,19 +80,14 @@ plugin.tx_formrelay.settings.dataProviders {
 [global]
 
 # NEWS campaign number
-[{$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled} == 1 && formrelay.extensionLoaded('news')]
+[{$plugin.tx_formrelay.settings.dataProviders.sfdcCampaignNumber.enabled} == 1 && formrelay.extensionLoaded('news') && traverse(request.getQueryParams(), 'tx_news_pi1/news') > 0]
   page {
-    footerData.1536314635 = TEXT
-    footerData.1536314635 {
+    footerData.1530544080.20.value = /*news*/
+    footerData.1530544080.30 {
       data = GP:tx_news_pi1|news
+      value.field >
+      wrap = campaignNumber:"{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}"
       insertData = 1
-      wrap (
-			<script type="text/javascript">/*<![CDATA[*/
-			// via news ...
-			var formrelay_salesforce_campaign_number = "{DB:tx_news_domain_model_news:|:tx_formrelaysalesforce_campaignnumber}";
-			/*]]>*/</script>
-      )
-      required = 1
     }
   }
 [global]
