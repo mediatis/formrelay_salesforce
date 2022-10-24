@@ -4,9 +4,7 @@
     <header/>
     <body>
       <trans-unit id="tx_formrelaysalesforce_campaignnumber.description">
-        <source>Please make sure the campaign's Type is set to "Internet Activity" and the Subtype is set to "Global
-          Website".
-        </source>
+        <source>Please make sure the campaign's Type is set to "Internet Activity" and the Subtype is set to "Global Website".</source>
       </trans-unit>
     </body>
   </file>
