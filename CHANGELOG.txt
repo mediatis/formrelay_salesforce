@@ -1,4 +1,8 @@
 
+5.0.2
+
+[TASK] Use minified JavaScript for Campaign Code Cookies
+
 5.0.1
 
 [TASK] Update Campaign Number Handling for TYPO3 11
