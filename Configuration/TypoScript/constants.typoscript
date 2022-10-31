@@ -24,7 +24,7 @@ plugin.tx_formrelay_salesforce {
     }
 
     javascript {
-      campaignNumberCookieScript = EXT:formrelay_salesforce/Resources/Public/Javascript/campaigncookie.js
+      campaignNumberCookieScript = EXT:formrelay_salesforce/Resources/Public/Javascript/campaigncookie.min.js
     }
   }
 }
